@@ -2,7 +2,7 @@ from bottle import route, run, template, post, request, static_file
 import sqlite3, json, os
 
 def setConnection():
-    databaseName = "/media/pi/KINGSTON/VoterApp/10-20141022/DB.sqlite"
+    databaseName = "/media/pi/KINGSTON/Data/DB.sqlite"
     connection = sqlite3.Connection(databaseName)
     connection.row_factory = dict_factory
 
@@ -119,7 +119,7 @@ def voterShow(voterID):
     jsonResponse = json.dumps(data)
 
     if len(data) == 0:
-        return { "success" : False, "error" : "show called without a filename" }
+        return { "success" : False, "error" : "None or more than one voter returned" }
     else:
         return jsonResponse
 
