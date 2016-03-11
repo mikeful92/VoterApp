@@ -14,29 +14,21 @@ def dict_factory(cursor, row):
         d[col[0]] = row[idx]
     return d
 
-@route('/')
-@route('/voterapp')
-@route('/voterApp')
-@route('/VoterApp')
-def home():
-    templateUsed = "index.tpl"
-    return template(templateUsed)
-
-@post('/listVoter')
-def listVoter():
+def sqlSearch(formData):
     cursor = connection.cursor()
+    error = ""
 
     resultsQuery = """SELECT * FROM VOTERS WHERE """
     countQuery = "SELECT COUNT(*) FROM VOTERS WHERE "
 
-    firstName = request.forms.get('firstName').upper()
-    lastName = request.forms.get('lastName').upper()
-    middleName = request.forms.get('middleName').upper()
-    countyCode = request.forms.get('countyCode')
-    voterID = request.forms.get('voterID')
-    zipCode = request.forms.get('zipCode')
-    birthMonth = request.forms.get('birthMonth')
-    birthYear = request.forms.get('birthYear')
+    firstName = formData.get('firstName').upper()
+    lastName = formData.get('lastName').upper()
+    middleName = formData.get('middleName').upper()
+    countyCode = formData.get('countyCode')
+    voterID = formData.get('voterID')
+    zipCode = formData.get('zipCode')
+    birthMonth = formData.get('birthMonth')
+    birthYear = formData.get('birthYear')
     queryFields = []
 
     if firstName != "":
@@ -71,7 +63,7 @@ def listVoter():
 
     if len(queryFields) == 0:
         error = "Please fill in at least one field"
-        return template("index.tpl", error=error)
+        return {}, 0, error
         
     resultsQuery = resultsQuery + """ AND """.join(queryFields) + """;"""
     countQuery = countQuery + " AND ".join(queryFields) + ";"
@@ -81,13 +73,26 @@ def listVoter():
 
     cursor.execute(resultsQuery)
     results = cursor.fetchall()
-    
+
     cursor.close()
-    print(count['COUNT(*)'])
-    if count['COUNT(*)'] <= 50:
-        output = template("response.tpl", rows = results, firstName=firstName, lastName=lastName, middleName=middleName, voterID=voterID, zipCode=zipCode, count=count)
-    else:
-        output = template("response.tpl", rows = results, firstName=firstName, lastName=lastName, middleName=middleName, voterID=voterID, zipCode=zipCode, count=count)
+
+    return results, count, error
+
+@route('/')
+@route('/voterapp')
+@route('/voterApp')
+@route('/VoterApp')
+def home():
+    templateUsed = "index.tpl"
+    return template(templateUsed)
+
+@post('/listVoter')
+def listVoter():
+    formData = request.forms
+    results, count, error = sqlSearch(formData)
+
+    output = template("response.tpl", rows = results, firstName= formData.get('firstName'), lastName=formData.get('lastName'), middleName=formData.get('middleName'), voterID=formData.get('voterID'), zipCode=formData.get('zipCode'), count=count)
+    
     return output
 
 @route('/voter/<voterID>')
