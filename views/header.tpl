@@ -127,12 +127,12 @@
                         </div>
                         <div class="col-lg-1">
                             <div class="input-group">
-                                <input type="text" class="form-control input" name="birthMonth" placeholder="Birth Month">
+                                <input type="text" class="form-control input" name="birthMonth" placeholder="Birth Month" value="{{ get('birthMonth','') }}">
                             </div>
                         </div>
                         <div class="col-lg-1">
                             <div class="input-group">
-                                <input type="text" class="form-control input" name="birthYear" placeholder="Birth Year">
+                                <input type="text" class="form-control input" name="birthYear" placeholder="Birth Year" value="{{ get('birthYear','')}}">
                             </div>
                         </div>
                         <div class="col-lg-1">
