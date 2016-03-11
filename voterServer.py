@@ -2,7 +2,7 @@ from bottle import route, run, template, post, request, static_file
 import sqlite3, json, os
 
 def setConnection():
-    databaseName = "/media/pi/KINGSTON/Data/DB.sqlite"
+    databaseName = "../Data/DB.sqlite"
     connection = sqlite3.Connection(databaseName)
     connection.row_factory = dict_factory
 
@@ -24,26 +24,28 @@ def home():
 def listVoter():
     cursor = connection.cursor()
 
-    query = """SELECT FirstName, MiddleName, LastName, Suffix, AddressLine1, AddressLine2, City, CountyCode, Zipcode, VoterID, BirthDate, PartyAffiliation FROM VOTERS WHERE """
+    resultsQuery = """SELECT * FROM VOTERS WHERE """
+    countQuery = "SELECT COUNT(*) FROM VOTERS WHERE "
 
     firstName = request.forms.get('firstName').upper()
     lastName = request.forms.get('lastName').upper()
     middleName = request.forms.get('middleName').upper()
     countyCode = request.forms.get('countyCode')
     voterID = request.forms.get('voterID')
+    zipCode = request.forms.get('zipCode')
+    birthMonth = request.forms.get('birthMonth')
+    birthYear = request.forms.get('birthYear')
     queryFields = []
 
     if firstName != "":
         if "*" in firstName:
-            firstName = firstName.replace("*", "%")
-            queryFields.append('FirstName LIKE "' + firstName + '"')
+            queryFields.append('FirstName LIKE "' + firstName.replace("*", "%") + '"')
         else:
             queryFields.append('FirstName = "' + firstName + '"')
 
     if lastName != "":
         if "*" in lastName:
-            lastName = lastName.replace("*", "%")
-            queryFields.append('LastName LIKE "' + lastName + '"')
+            queryFields.append('LastName LIKE "' + lastName.replace("*", "%") + '"')
         else:
             queryFields.append('LastName = "' + lastName + '"')
 
@@ -56,19 +58,33 @@ def listVoter():
     if voterID != "":
         queryFields.append('VoterID = "' + voterID + '"')
 
-    if len(queryFields) == 0:
-        return template("index.tpl")
-        
-    query = query + """ AND """.join(queryFields) + """;"""
+    if zipCode != "":
+        if "*" in zipCode:
+            queryFields.append('ZipCode LIKE "' + zipCode.replace("*", "%") + '"')
+        else:
+            queryFields.append('ZipCode = "' + zipCode + '"')
 
-    cursor.execute(query)
-    results = cursor.fetchmany(25)
+    if birthMonth != "" and birthYear != "":
+        queryFields.append('BirthDate Like "' + birthMonth + '/_%_%/' + birthYear +'"')
+
+    if len(queryFields) == 0:
+        error = "Please fill in at least one field"
+        return template("index.tpl", error=error)
+        
+    resultsQuery = resultsQuery + """ AND """.join(queryFields) + """;"""
+    countQuery = countQuery + " AND ".join(queryFields) + ";"
+
+    cursor.execute(countQuery)
+    count = cursor.fetchone()
+
+    cursor.execute(resultsQuery)
+    results = cursor.fetchmany(50)
     cursor.close()
 
     if len(results) == 0:
-        output = template("index.tpl")
+        output = template("response.tpl", rows = results, firstName=firstName, lastName=lastName, middleName=middleName, voterID=voterID, zipCode=zipCode, count=count)
     else:
-        output = template("response.tpl", rows = results, firstName=firstName, lastName=lastName, middleName=middleName, voterID=voterID)
+        output = template("response.tpl", rows = results, firstName=firstName, lastName=lastName, middleName=middleName, voterID=voterID, zipCode=zipCode, count=count)
     return output
 
 @route('/voter/<voterID>')
@@ -89,17 +105,22 @@ def listVoter(voterID):
 @route('/address/<address>')
 def listAddress(address):
     cursor = connection.cursor()
-    query = ("SELECT FirstName, MiddleName, LastName, Suffix, " +
+    resultsQuery = ("SELECT FirstName, MiddleName, LastName, Suffix, " +
             "AddressLine1, AddressLine2, City, CountyCode, Zipcode, "+
             "VoterID, BirthDate, PartyAffiliation " + 
             "FROM VOTERS " +
             "WHERE AddressLine1 = ?")
-    cursor.execute(query, [address])
+    countQuery = "SELECT COUNT(*) FROM VOTERS WHERE AddressLine1 = ?"
+    cursor.execute(countQuery, [address])
+    count = cursor.fetchone()
+
+    cursor.execute(resultsQuery, [address])
     results = cursor.fetchmany(25)
+
     if len(results) == 0:
         output = template("index.tpl")
     else:
-        output = template("response.tpl", rows = results)
+        output = template("response.tpl", rows = results, count=count)
     return output
 
 

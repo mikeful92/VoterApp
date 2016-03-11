@@ -2,20 +2,26 @@
 <div class="row">
     <div class="col-lg-10 col-lg-offset-1">
         <div class="well">
+            % if defined('count'):
+                <div class="panel">
+                    <p>Total results: {{count['COUNT(*)']}}</p>
+                </div>
+            % end
             <table class="table table-striped">
                 <tr>
                     <th>First Name</th>
                     <th>Middle Name</th>
                     <th>Last Name</th>
                     <th>Suffix</th>
-                    <th>Address</th>
+                    <th>Address Line 1</th>
+                    <th>Address Line 2</th>
                     <th>City</th>
                     <th>County</th>
                     <th>Zip Code</th>
                     <th>Voter ID</th>
                     <th>Date of Birth</th>
                     <th>Party</th>
-                    <th></th>
+                    <th><button class="btn btn-default btn-xs">Download CSV</button></th>
                 </tr>
                 %for row in rows:   
                     <tr>
@@ -23,7 +29,8 @@
                         <td>{{row['MiddleName']}}</td>
                         <td>{{row['LastName']}}</td>
                         <td>{{row['Suffix']}}</td>
-                        <td>{{row['AddressLine1']}} {{row['AddressLine2']}}</td>
+                        <td>{{row['AddressLine1']}}</td>
+                        <td>{{row['AddressLine2']}}</td>
                         <td>{{row['City']}}</td>
                         <td>{{row['CountyCode']}}</td>
                         <td>{{row['Zipcode']}}</td>
