@@ -72,7 +72,7 @@ def sqlSearch(formData):
     count = cursor.fetchone()
 
     cursor.execute(resultsQuery)
-    results = cursor.fetchall()
+    results = cursor.fetchmany(15000)
 
     cursor.close()
 
