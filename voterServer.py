@@ -1,9 +1,8 @@
 from bottle import route, run, template, post, request, static_file
-import sqlite3, json, os
+import sqlite3, json, os, sys
 
-def setConnection():
-    databaseName = "../Data/DB.sqlite"
-    connection = sqlite3.Connection(databaseName)
+def setConnection(databasePath):
+    connection = sqlite3.Connection(databasePath)
     connection.row_factory = dict_factory
 
     return connection
@@ -63,7 +62,7 @@ def sqlSearch(formData):
 
     if len(queryFields) == 0:
         error = "Please fill in at least one field"
-        return {}, 0, error
+        return {}, {'COUNT(*)': 'ERROR'}, error
         
     resultsQuery = resultsQuery + """ AND """.join(queryFields) + """;"""
     countQuery = countQuery + " AND ".join(queryFields) + ";"
@@ -73,6 +72,8 @@ def sqlSearch(formData):
 
     cursor.execute(resultsQuery)
     results = cursor.fetchmany(15000)
+    if count['COUNT(*)'] > 15000:
+        error = "Only showing 15,000 results"
 
     cursor.close()
 
@@ -91,7 +92,11 @@ def listVoter():
     formData = request.forms
     results, count, error = sqlSearch(formData)
 
-    output = template("response.tpl", rows = results, firstName= formData.get('firstName'), lastName=formData.get('lastName'), middleName=formData.get('middleName'), voterID=formData.get('voterID'), zipCode=formData.get('zipCode'), count=count)
+    if error != '':
+        output = template("response.tpl", rows = results, firstName= formData.get('firstName'), lastName=formData.get('lastName'), middleName=formData.get('middleName'), voterID=formData.get('voterID'), zipCode=formData.get('zipCode'), count=count, error=error)
+    else:
+        output = template("response.tpl", rows = results, firstName= formData.get('firstName'), lastName=formData.get('lastName'), middleName=formData.get('middleName'), voterID=formData.get('voterID'), zipCode=formData.get('zipCode'), count=count)
+
     
     return output
 
@@ -152,7 +157,11 @@ def voterShow(voterID):
     else:
         return jsonResponse
 
-global connection 
-connection = setConnection()
+global connection
+args = sys.argv
+if len(args) == 2:
+    connection = setConnection(os.path.join(args[1], 'DB.sqlite'))
+else:
+    connection = setConnection('../Data/DB.sqlite')
 run(host='0.0.0.0', port=8080, debug=True)
 
