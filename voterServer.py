@@ -16,6 +16,8 @@ def dict_factory(cursor, row):
 
 @route('/')
 @route('/voterapp')
+@route('/voterApp')
+@route('/VoterApp')
 def home():
     templateUsed = "index.tpl"
     return template(templateUsed)
@@ -78,10 +80,11 @@ def listVoter():
     count = cursor.fetchone()
 
     cursor.execute(resultsQuery)
-    results = cursor.fetchmany(50)
+    results = cursor.fetchall()
+    
     cursor.close()
-
-    if len(results) == 0:
+    print(count['COUNT(*)'])
+    if count['COUNT(*)'] <= 50:
         output = template("response.tpl", rows = results, firstName=firstName, lastName=lastName, middleName=middleName, voterID=voterID, zipCode=zipCode, count=count)
     else:
         output = template("response.tpl", rows = results, firstName=firstName, lastName=lastName, middleName=middleName, voterID=voterID, zipCode=zipCode, count=count)
