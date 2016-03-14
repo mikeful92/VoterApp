@@ -59,6 +59,10 @@ def sqlSearch(formData):
 
     if birthMonth != "" and birthYear != "":
         queryFields.append('BirthDate Like "' + birthMonth + '/_%_%/' + birthYear +'"')
+    elif birthMonth == "" and birthYear != "":
+        queryFields.append('BirthDate LIKE "_%_%/_%_%/' + birthYear + '"')
+    elif birthMonth != "" and birthYear == "":
+        queryFields.append('BirthDate LIKE "' + birthMonth + '/_%_%/_%_%_%_%"')
 
     if len(queryFields) == 0:
         error = "Please fill in at least one field"
