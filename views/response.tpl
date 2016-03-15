@@ -22,7 +22,7 @@
                         <th>Voter ID</th>
                         <th>Date of Birth</th>
                         <th>Party</th>
-                        <th><button class="btn btn-default btn-xs">Download CSV</button></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>

@@ -96,7 +96,10 @@ def sqlSearch(formData):
         queryFields.append('PhoneNumber = "' + phoneNumber + '"')
 
     if email != "":
-        queryFields.append('Email = "' + email + '"')
+        if "*" in email:
+            queryFields.append('Email LIKE "' + email.replace("*","%") + '"')
+        else:
+            queryFields.append('Email = "' + email + '"')
 
 
     if len(queryFields) == 0:
