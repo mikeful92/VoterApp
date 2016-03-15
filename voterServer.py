@@ -20,15 +20,26 @@ def sqlSearch(formData):
     resultsQuery = """SELECT * FROM VOTERS WHERE """
     countQuery = "SELECT COUNT(*) FROM VOTERS WHERE "
 
+    voterID = formData.get('voterID')
     firstName = formData.get('firstName').upper()
     lastName = formData.get('lastName').upper()
     middleName = formData.get('middleName').upper()
+    address = formData.get('residenceAddress1').upper()
+    city = formData.get('city').upper()
     countyCode = formData.get('countyCode')
-    voterID = formData.get('voterID')
     zipCode = formData.get('zipCode')
     birthMonth = formData.get('birthMonth')
     birthYear = formData.get('birthYear')
+    gender = formData.get('gender')
+    race = formData.get('race')
+    party = formData.get('party')
+    areaCode = formData.get('areaCode')
+    phoneNumber = formData.get('phoneNumber')
+    email = formData.get('email')
     queryFields = []
+
+    if voterID != "":
+        queryFields.append('VoterID = "' + voterID + '"')
 
     if firstName != "":
         if "*" in firstName:
@@ -45,17 +56,22 @@ def sqlSearch(formData):
     if middleName != "":
         queryFields.append('MiddleName = "' + middleName + '"')
 
+    if address != "":
+        queryFields.append('AddressLine1 = "' + address + '"')
+
+    if city != "":
+        queryFields.append('City = "' + city + '"')
+
+
     if countyCode:
         queryFields.append('CountyCode = "' + countyCode + '"')
-
-    if voterID != "":
-        queryFields.append('VoterID = "' + voterID + '"')
 
     if zipCode != "":
         if "*" in zipCode:
             queryFields.append('ZipCode LIKE "' + zipCode.replace("*", "%") + '"')
         else:
             queryFields.append('ZipCode = "' + zipCode + '"')
+
 
     if birthMonth != "" and birthYear != "":
         queryFields.append('BirthDate Like "' + birthMonth + '/_%_%/' + birthYear +'"')
@@ -64,13 +80,32 @@ def sqlSearch(formData):
     elif birthMonth != "" and birthYear == "":
         queryFields.append('BirthDate LIKE "' + birthMonth + '/_%_%/_%_%_%_%"')
 
+    if gender != "":
+        queryFields.append('Gender = "' + gender + '"')
+
+    if race != "":
+        queryFields.append('Race = "' + race + '"')
+
+    if party != "":
+        queryFields.append('PartyAffiliation = "' + party + '"')
+
+    if areaCode != "":
+        queryFields.append('PhoneAreaCode = "' + areaCode + '"')
+
+    if phoneNumber != "":
+        queryFields.append('PhoneNumber = "' + phoneNumber + '"')
+
+    if email != "":
+        queryFields.append('Email = "' + email + '"')
+
+
     if len(queryFields) == 0:
         error = "Please fill in at least one field"
         return {}, {'COUNT(*)': 'ERROR'}, error
         
     resultsQuery = resultsQuery + """ AND """.join(queryFields) + """;"""
     countQuery = countQuery + " AND ".join(queryFields) + ";"
-
+    
     cursor.execute(countQuery)
     count = cursor.fetchone()
 
