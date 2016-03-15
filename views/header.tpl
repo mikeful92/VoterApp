@@ -67,8 +67,8 @@
                         </div>
                         <div class="col-lg-2">
                             <div class="input-group">
-                                <input type="text"  class="form-control input"name="residenceAddress1" placeholder="Residence Address" value="{{ get('residenceAddress','') }}">
-                                <input type="text"  class="form-control input"name="city" placeholder="City" value="{{ get('city','') }}">
+                                <input type="text"  class="form-control input" name="residenceAddress1" placeholder="Residence Address" value="{{ get('residenceAddress','') }}">
+                                <input type="text"  class="form-control input" name="city" placeholder="City" value="{{ get('city','') }}">
                                 <select class="form-control input" name="countyCode">
                                     <option value='PAL' selected>Palm Beach</option>
                                     <option value=''> Statewide </option>
@@ -162,13 +162,13 @@
                         </div>
                         <div class="col-lg-1">
                             <div class="form-group">
-                                <input type="text" class="form-control input" name="areaCode" placeholder = "Area Code">
+                                <input type="text" class="form-control input" name="areaCode" placeholder = "Area Code" value = "{{get ('areaCode','') }}">
                             </div> 
                             <div class="form-group">
-                                <input type="text" class="form-control input" name="phoneNumber" placeholder = "Phone">
+                                <input type="text" class="form-control input" name="phoneNumber" placeholder = "Phone" value = "{{get ('phoneNumber','')}}">
                             </div>
                             <div class="form-group">
-                                <input type="text" class="form-control input" name="email" placeholder = "E-mail">
+                                <input type="text" class="form-control input" name="email" placeholder = "E-mail" value = "{{get ('email','')}}">
                             </div>
                         </div>
                         <div class="col-lg-2">
