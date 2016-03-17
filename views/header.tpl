@@ -39,7 +39,7 @@
             <div class="container">
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li><a class="navbar-brand" href="/">Florida Voter Search</a></li>
+                        <li><a class="navbar-brand" href="/">Florida Voter Search - Address/County not available</a></li>
                     </ul>
                 </div>
             </div>
@@ -68,9 +68,9 @@
                         </div>
                         <div class="col-lg-2">
                             <div class="input-group">
-                                <input type="text"  class="form-control input" name="residenceAddress1" placeholder="Residence Address" value="{{ get('residenceAddress','') }}">
+                                <input type="text"  class="form-control input" name="residenceAddress1" placeholder="Residence Address" value="{{ get('residenceAddress','') }}" disabled>
                                 <input type="text"  class="form-control input" name="city" placeholder="City" value="{{ get('city','') }}">
-                                <select class="form-control input" name="countyCode">
+                                <select class="form-control input" name="countyCode" disabled>
                                     <option value='PAL' selected>Palm Beach</option>
                                     <option value=''> Statewide </option>
                                     <option value='BRO'>Broward</option>
