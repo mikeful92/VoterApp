@@ -7,8 +7,8 @@
         })
         $(document).ready(function() {
             $("#results").DataTable({
-                "dom": 'lBfrtip',
-                "buttons": ['copy','csv','excel','print']
+                "dom": 'lfrtip',
+                "lengthMenu": [100, 250, 500]
             });
         } );
     </script>

@@ -47,7 +47,7 @@
             <div class="col-lg-10 col-lg-offset-1">
                 <div class="well">
                     
-                    <form class="form" action="/listVoter" METHOD="POST" style="margin-bottom: 0;">
+                    <form class="form" action="/listVoter" METHOD="POST" enctype = "multipart/form-data" style="margin-bottom: 0;">
                     <div class="row">
                         <div class="col-lg-1 col-lg-offset-1">
                             <div class="input-group">
@@ -172,7 +172,8 @@
                             </div>
                         </div>
                         <div class="col-lg-2">
-                            <button class="btn btn-primary btn-block" type="submit">Lookup</button>
+                            <button class="btn btn-primary btn-block" type="submit" name="type" value="Lookup">Lookup</button>
+                            <button class="btn btn-primary btn-block" type="submit" name="type" value="Export">Export</button>
                         </div>
                     </div>
                     </form>

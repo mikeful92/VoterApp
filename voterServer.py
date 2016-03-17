@@ -1,5 +1,5 @@
-from bottle import route, run, template, post, request, static_file
-import sqlite3, json, os, sys
+from bottle import route, run, template, post, request, static_file, response
+import sqlite3, json, os, sys, csv, StringIO
 
 def setConnection(databasePath):
     connection = sqlite3.Connection(databasePath)
@@ -13,7 +13,7 @@ def dict_factory(cursor, row):
         d[col[0]] = row[idx]
     return d
 
-def sqlSearch(formData):
+def sqlSearch(formData, full=False):
     cursor = connection.cursor()
     error = ""
 
@@ -113,13 +113,16 @@ def sqlSearch(formData):
     count = cursor.fetchone()
 
     cursor.execute(resultsQuery)
-    results = cursor.fetchmany(15000)
-    if count['COUNT(*)'] > 15000:
-        error = "Only showing 15,000 results"
+    if full:
+        results = cursor.fetchall()
+    else:
+        results = cursor.fetchmany(500)
 
     cursor.close()
 
     return results, count, error
+
+
 
 @route('/')
 @route('/voterapp')
@@ -132,14 +135,30 @@ def home():
 @post('/listVoter')
 def listVoter():
     formData = request.forms
-    results, count, error = sqlSearch(formData)
+    if formData.get('type') == 'Export':
+        results, count, error = sqlSearch(formData, True)
+        keys = results[0].keys()
+        outputFile = StringIO.StringIO()
+        dictWriter = csv.DictWriter(outputFile, keys)
+        dictWriter.writeheader()
+        dictWriter.writerows(results)
 
-    if error != '':
-        output = template("response.tpl", rows = results, firstName= formData.get('firstName'), lastName=formData.get('lastName'), middleName=formData.get('middleName'), voterID=formData.get('voterID'), zipCode=formData.get('zipCode'), birthMonth=formData.get('birthMonth'), birthYear=formData.get('birthYear'), residenceAddress= formData.get('residenceAddress1'), city=formData.get('city'), gender=formData.get('gender'), race=formData.get('race'), party=formData.get('party'), areaCode=formData.get('areaCode'), phoneNumber=formData.get('phoneNumber'), email=formData.get('email'), count=count, error=error)
+        response.headers['Content-Type'] = 'application/csv; charset=UTF-8'
+        response.headers['Content-Disposition'] = 'attachment; filename=export.csv'
+        return outputFile.getvalue()
+
+    elif formData.get('type') == 'Lookup':
+        results, count, error = sqlSearch(formData)
+        if error != '':
+            output = template("response.tpl", rows = results, firstName= formData.get('firstName'), lastName=formData.get('lastName'), middleName=formData.get('middleName'), voterID=formData.get('voterID'), zipCode=formData.get('zipCode'), birthMonth=formData.get('birthMonth'), birthYear=formData.get('birthYear'), residenceAddress= formData.get('residenceAddress1'), city=formData.get('city'), gender=formData.get('gender'), race=formData.get('race'), party=formData.get('party'), areaCode=formData.get('areaCode'), phoneNumber=formData.get('phoneNumber'), email=formData.get('email'), count=count, error=error)
+        else:
+            output = template("response.tpl", rows = results, firstName= formData.get('firstName'), lastName=formData.get('lastName'), middleName=formData.get('middleName'), voterID=formData.get('voterID'), zipCode=formData.get('zipCode'), birthMonth=formData.get('birthMonth'), birthYear=formData.get('birthYear'), residenceAddress= formData.get('residenceAddress1'), city=formData.get('city'), gender=formData.get('gender'), race=formData.get('race'), party=formData.get('party'), areaCode=formData.get('areaCode'), phoneNumber=formData.get('phoneNumber'), email=formData.get('email'), count=count)
     else:
-        output = template("response.tpl", rows = results, firstName= formData.get('firstName'), lastName=formData.get('lastName'), middleName=formData.get('middleName'), voterID=formData.get('voterID'), zipCode=formData.get('zipCode'), birthMonth=formData.get('birthMonth'), birthYear=formData.get('birthYear'), residenceAddress= formData.get('residenceAddress1'), city=formData.get('city'), gender=formData.get('gender'), race=formData.get('race'), party=formData.get('party'), areaCode=formData.get('areaCode'), phoneNumber=formData.get('phoneNumber'), email=formData.get('email'), count=count)
+        output = "Error"
     
     return output
+
+
 
 @route('/voter/<voterID>')
 def listVoter(voterID):
