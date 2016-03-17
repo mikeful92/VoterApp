@@ -42,31 +42,51 @@ def sqlSearch(formData, full=False):
         queryFields.append('VoterID = "' + voterID + '"')
 
     if firstName != "":
-        if "*" in firstName:
+        if firstName == "*":
+            queryFields.append('FirstName <> ""')
+        elif "*" in firstName:
             queryFields.append('FirstName LIKE "' + firstName.replace("*", "%") + '"')
         else:
             queryFields.append('FirstName = "' + firstName + '"')
 
     if lastName != "":
-        if "*" in lastName:
+        if lastName == "*":
+            queryFields.append('LastName <> ""')
+        elif "*" in lastName:
             queryFields.append('LastName LIKE "' + lastName.replace("*", "%") + '"')
         else:
             queryFields.append('LastName = "' + lastName + '"')
 
     if middleName != "":
-        queryFields.append('MiddleName = "' + middleName + '"')
+        if middleName == "*":
+            queryFields.append('MiddleName <> ""')
+        elif "*" in middleName:
+            queryFields.append('MiddleName LIKE "' + middleName.replace("*", "%") + '"')
+        else:
+            queryFields.append('MiddleName = "' + middleName + '"')
 
     if address != "":
         queryFields.append('AddressLine1 = "' + address + '"')
 
     if city != "":
-        queryFields.append('City = "' + city + '"')
-
+        if city == "*":
+            queryFields.append('City <> ""')
+        elif "*" in city:
+            queryFields.append('City LIKE "' + city.replace("*", "%") + '"')
+        else:
+            queryFields.append('City = "' + city + '"')
 
     if countyCode:
-        queryFields.append('CountyCode = "' + countyCode + '"')
+        if countyCode == "*":
+            queryFields.append('CountyCode <> ""')
+        elif "*" in countyCode:
+            queryFields.append('CountyCode LIKE "' + countyCode.replace("*", "%") + '"')
+        else:
+            queryFields.append('CountyCode = "' + countyCode + '"')
 
     if zipCode != "":
+        if zipCode == "*":
+            queryFields.append('ZipCode <> ""')
         if "*" in zipCode:
             queryFields.append('ZipCode LIKE "' + zipCode.replace("*", "%") + '"')
         else:
@@ -81,22 +101,36 @@ def sqlSearch(formData, full=False):
         queryFields.append('BirthDate LIKE "' + birthMonth + '/_%_%/_%_%_%_%"')
 
     if gender != "":
-        queryFields.append('Gender = "' + gender + '"')
+        if gender == "*":
+            queryFields.append('Gender <> ""')
+        else:
+            queryFields.append('Gender = "' + gender + '"')
 
     if race != "":
         queryFields.append('Race = "' + race + '"')
 
     if party != "":
-        queryFields.append('PartyAffiliation = "' + party + '"')
+        if party == "*":
+            queryFields.append('PartyAffiliation <> ""')
+        else:
+            queryFields.append('PartyAffiliation = "' + party + '"')
 
     if areaCode != "":
-        queryFields.append('PhoneAreaCode = "' + areaCode + '"')
+        if areaCode == "*":
+            queryFields.append('PhoneAreaCode <> ""')
+        else:
+            queryFields.append('PhoneAreaCode = "' + areaCode + '"')
 
     if phoneNumber != "":
-        queryFields.append('PhoneNumber = "' + phoneNumber + '"')
+        if phoneNumber == "*":
+            queryFields.append('PhoneNumber <> ""')
+        else:
+            queryFields.append('PhoneNumber = "' + phoneNumber + '"')
 
     if email != "":
-        if "*" in email:
+        if email == "*":
+            queryFields.append('Email <> ""')
+        elif "*" in email:
             queryFields.append('Email LIKE "' + email.replace("*","%") + '"')
         else:
             queryFields.append('Email = "' + email + '"')
