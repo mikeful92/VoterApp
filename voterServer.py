@@ -82,13 +82,13 @@ def sqlSearch(formData, full=False):
         else:
             queryFields.append('City = "' + city + '"')
 
-    if countyCode:
-        if countyCode == "*":
-            queryFields.append('CountyCode <> ""')
-        elif "*" in countyCode:
-            queryFields.append('CountyCode LIKE "' + countyCode.replace("*", "%") + '"')
-        else:
-            queryFields.append('CountyCode = "' + countyCode + '"')
+    # if countyCode:
+    #     if countyCode == "*":
+    #         queryFields.append('CountyCode <> ""')
+    #     elif "*" in countyCode:
+    #         queryFields.append('CountyCode LIKE "' + countyCode.replace("*", "%") + '"')
+    #     else:
+    #         queryFields.append('CountyCode = "' + countyCode + '"')
 
     if zipCode != "":
         if zipCode == "*":
@@ -160,6 +160,7 @@ def sqlSearch(formData, full=False):
     cursor.execute(countQuery)
     count = cursor.fetchone()
 
+    print(resultsQuery)
     cursor.execute(resultsQuery)
     if full:
         results = cursor.fetchall()
@@ -269,10 +270,13 @@ def voterShow(voterID):
         return jsonResponse
 
 global connection
+connection = setConnection('../Data/DB.sqlite')
 args = sys.argv
 if len(args) == 2:
-    connection = setConnection(os.path.join(args[1], 'DB.sqlite'))
+    port = int(os.path.join(args[1]))
+
 else:
-    connection = setConnection('../Data/DB.sqlite')
+    port = 8080
+
 run(host='0.0.0.0', port=8080, debug=True)
 
