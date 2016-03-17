@@ -176,6 +176,9 @@ def listVoter():
     if formData.get('type') == 'Export':
         results, count, error = sqlSearch(formData, True)
         data = []
+        headers = ['VoterID', 'LastName', 'Suffix', 'FirstName', 'MiddleName', 'AddressLine1', 'AddressLine2', 'City', 'CountyCode', 'State', 'Zipcode', 'MailingAddressLine1', 'MailingAddressLine2', 'MailingAddressLine3', 'MailingCity', 'MailingState', 'MailingZipcode', 'MailingCountry', 'Gender', 'Race', 'BirthDate', 'RegistrationDate', 'PartyAffiliation', 'VoterStatus', 'PhoneAreaCode', 'PhoneNumber', 'PhoneExtension', 'Email']
+        data.append(','.join(headers))
+
         for row in results:
             data.append(','.join(row))
 
