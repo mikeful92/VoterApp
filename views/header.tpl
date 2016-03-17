@@ -155,7 +155,30 @@
                         </div>
                         <div class="col-lg-1">
                             <div class="input-group">
-                                <input type="text" class="form-control input" name="gender" placeholder = "Gender" value = "{{get ('gender', '') }}">
+                                <select class="form-control input" name="gender">
+                                    %if defined('gender'):
+                                        % if gender == "M":
+                                            <option value="">--</option>
+                                            <option value="M" selected>Male</option>
+                                            <option value='F'>Female</option>
+                                        %end
+                                        % if gender == 'F':
+                                            <option value="">--</option>
+                                            <option value="M">Male</option>
+                                            <option value='F' selected>Female</option>
+                                        %end
+                                        % if gender == '':
+                                            <option value="" selected>--</option>
+                                            <option value="M">Male</option>
+                                            <option value='F'>Female</option>
+                                        %end
+                                    %end
+                                    %if not defined('gender'):
+                                        <option value="" selected>--</option>
+                                        <option value="M">Male</option>
+                                        <option value='F'>Female</option>
+                                    %end
+                                </select>
                                 <input type="text" class="form-control input" name="race" placeholder = "Race" value = "{{get ('race', '') }}">
                                 <input type="text" class="form-control input" name="party" placeholder = "Party" value = "{{get ('party', '') }}">
                             </div>
