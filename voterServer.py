@@ -34,6 +34,8 @@ def sqlSearch(formData, full=False):
     zipCode = formData.get('zipCode')
     birthMonth = formData.get('birthMonth')
     birthYear = formData.get('birthYear')
+    regMonth = formData.get('regMonth')
+    regYear = formData.get('regYear')
     gender = formData.get('gender')
     race = formData.get('race')
     party = formData.get('party')
@@ -103,6 +105,14 @@ def sqlSearch(formData, full=False):
         queryFields.append('BirthDate LIKE "_%_%/_%_%/' + birthYear + '"')
     elif birthMonth != "" and birthYear == "":
         queryFields.append('BirthDate LIKE "' + birthMonth + '/_%_%/_%_%_%_%"')
+
+    if regMonth != "" and regYear != "":
+        queryFields.append('RegistrationDate Like "' + regMonth + '/_%_%/' + regYear +'"')
+    elif regMonth == "" and regYear != "":
+        queryFields.append('RegistrationDate LIKE "_%_%/_%_%/' + regYear + '"')
+    elif regMonth != "" and regYear == "":
+        queryFields.append('RegistrationDate LIKE "' + regMonth + '/_%_%/_%_%_%_%"')
+
 
     if gender != "":
         if gender == "*":
@@ -191,9 +201,9 @@ def listVoter():
     elif formData.get('type') == 'Lookup':
         results, count, error = sqlSearch(formData)
         if error != '':
-            output = template("response.tpl", rows = results, firstName= formData.get('firstName'), lastName=formData.get('lastName'), middleName=formData.get('middleName'), voterID=formData.get('voterID'), zipCode=formData.get('zipCode'), birthMonth=formData.get('birthMonth'), birthYear=formData.get('birthYear'), residenceAddress= formData.get('residenceAddress1'), city=formData.get('city'), gender=formData.get('gender'), race=formData.get('race'), party=formData.get('party'), areaCode=formData.get('areaCode'), phoneNumber=formData.get('phoneNumber'), email=formData.get('email'), count=count, error=error)
+            output = template("response.tpl", rows = results, firstName= formData.get('firstName'), lastName=formData.get('lastName'), middleName=formData.get('middleName'), voterID=formData.get('voterID'), zipCode=formData.get('zipCode'), birthMonth=formData.get('birthMonth'), birthYear=formData.get('birthYear'), residenceAddress= formData.get('residenceAddress1'), city=formData.get('city'), gender=formData.get('gender'), race=formData.get('race'), party=formData.get('party'), areaCode=formData.get('areaCode'), phoneNumber=formData.get('phoneNumber'), email=formData.get('email'), regMonth=formData.get('regMonth'), regYear=formData.get('regYear'), count=count, error=error)
         else:
-            output = template("response.tpl", rows = results, firstName= formData.get('firstName'), lastName=formData.get('lastName'), middleName=formData.get('middleName'), voterID=formData.get('voterID'), zipCode=formData.get('zipCode'), birthMonth=formData.get('birthMonth'), birthYear=formData.get('birthYear'), residenceAddress= formData.get('residenceAddress1'), city=formData.get('city'), gender=formData.get('gender'), race=formData.get('race'), party=formData.get('party'), areaCode=formData.get('areaCode'), phoneNumber=formData.get('phoneNumber'), email=formData.get('email'), count=count)
+            output = template("response.tpl", rows = results, firstName= formData.get('firstName'), lastName=formData.get('lastName'), middleName=formData.get('middleName'), voterID=formData.get('voterID'), zipCode=formData.get('zipCode'), birthMonth=formData.get('birthMonth'), birthYear=formData.get('birthYear'), residenceAddress= formData.get('residenceAddress1'), city=formData.get('city'), gender=formData.get('gender'), race=formData.get('race'), party=formData.get('party'), areaCode=formData.get('areaCode'), phoneNumber=formData.get('phoneNumber'), email=formData.get('email'), regMonth=formData.get('regMonth'), regYear=formData.get('regYear'), count=count)
     else:
         output = "Error"
     

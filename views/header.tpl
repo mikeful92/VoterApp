@@ -156,26 +156,32 @@
                         </div>
                         <div class="col-lg-1">
                             <div class="input-group">
+                                <input type="text" class="form-control input" name="regMonth" placeholder="Reg. Month" value="{{ get('regMonth','') }}">
+                                <input type="text" class="form-control input" name="regYear" placeholder="Reg. Year" value="{{ get('regYear','')}}">
+                            </div>
+                        </div>
+                        <div class="col-lg-1">
+                            <div class="input-group">
                                 <select class="form-control input" name="gender">
                                     %if defined('gender'):
                                         % if gender == "M":
-                                            <option value="">--</option>
+                                            <option value="">Any</option>
                                             <option value="M" selected>Male</option>
                                             <option value='F'>Female</option>
                                         %end
                                         % if gender == 'F':
-                                            <option value="">--</option>
+                                            <option value="">Any</option>
                                             <option value="M">Male</option>
                                             <option value='F' selected>Female</option>
                                         %end
                                         % if gender == '':
-                                            <option value="" selected>--</option>
+                                            <option value="" selected>Any</option>
                                             <option value="M">Male</option>
                                             <option value='F'>Female</option>
                                         %end
                                     %end
                                     %if not defined('gender'):
-                                        <option value="" selected>--</option>
+                                        <option value="" selected>Any</option>
                                         <option value="M">Male</option>
                                         <option value='F'>Female</option>
                                     %end
@@ -195,7 +201,7 @@
                                 <input type="text" class="form-control input" name="email" placeholder = "E-mail" value = "{{get ('email','')}}">
                             </div>
                         </div>
-                        <div class="col-lg-2">
+                        <div class="col-lg-1">
                             <button class="btn btn-primary btn-block" type="submit" name="type" value="Lookup">Lookup</button>
                             <button class="btn btn-primary btn-block" type="submit" name="type" value="Export">Export</button>
                         </div>
