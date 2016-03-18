@@ -188,15 +188,15 @@ def listVoter():
         results, count, error = sqlSearch(formData, True)
         data = []
         headers = ['VoterID', 'LastName', 'Suffix', 'FirstName', 'MiddleName', 'AddressLine1', 'AddressLine2', 'City', 'CountyCode', 'State', 'Zipcode', 'MailingAddressLine1', 'MailingAddressLine2', 'MailingAddressLine3', 'MailingCity', 'MailingState', 'MailingZipcode', 'MailingCountry', 'Gender', 'Race', 'BirthDate', 'RegistrationDate', 'PartyAffiliation', 'VoterStatus', 'PhoneAreaCode', 'PhoneNumber', 'PhoneExtension', 'Email']
-        data.append(','.join(headers))
+        data.append('\t'.join(headers))
 
         for row in results:
-            data.append(','.join(row))
+            data.append('\t'.join(row))
 
         output = '\n'.join(data)
 
         response.headers['Content-Type'] = 'application/csv; charset=UTF-8'
-        response.headers['Content-Disposition'] = 'attachment; filename=export.csv'
+        response.headers['Content-Disposition'] = 'attachment; filename=export.txt'
         return output
 
     elif formData.get('type') == 'Lookup':

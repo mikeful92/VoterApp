@@ -168,22 +168,32 @@
                                             <option value="">Any</option>
                                             <option value="M" selected>Male</option>
                                             <option value='F'>Female</option>
+                                            <option value="U">Unknown</option>
                                         %end
                                         % if gender == 'F':
                                             <option value="">Any</option>
                                             <option value="M">Male</option>
                                             <option value='F' selected>Female</option>
+                                            <option value="U">Unknown</option>
                                         %end
                                         % if gender == '':
                                             <option value="" selected>Any</option>
                                             <option value="M">Male</option>
                                             <option value='F'>Female</option>
+                                            <option value="U">Unknown</option>
+                                        %end
+                                        % if gender == 'U':
+                                            <option value="" >Any</option>
+                                            <option value="M">Male</option>
+                                            <option value='F'>Female</option>
+                                            <option value="U" selected>Unknown</option>
                                         %end
                                     %end
                                     %if not defined('gender'):
                                         <option value="" selected>Any</option>
                                         <option value="M">Male</option>
                                         <option value='F'>Female</option>
+                                        <option value="U">Unknown</option>
                                     %end
                                 </select>
                                 <input type="text" class="form-control input" name="race" placeholder = "Race" value = "{{get ('race', '') }}">
