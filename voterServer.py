@@ -20,8 +20,8 @@ def sqlSearch(formData, full=False):
     cursor = connection.cursor()
     error = ""
 
-    resultsQuery = """SELECT * FROM VOTERS WHERE """
-    countQuery = "SELECT COUNT(*) FROM VOTERS WHERE "
+    resultsQuery = """SELECT * FROM VOTERS """
+    countQuery = "SELECT COUNT(*) FROM VOTERS "
 
     voterID = formData.get('voterID')
     firstName = formData.get('firstName')
@@ -169,12 +169,10 @@ def sqlSearch(formData, full=False):
             queryFields.append('Email LIKE "' + email.replace("*","%") + '"')
 
 
-    if len(queryFields) == 0:
-        error = "Please fill in at least one field"
-        return {}, {'COUNT(*)': 'ERROR'}, error
-        
-    resultsQuery = resultsQuery + """ AND """.join(queryFields) + """;"""
-    countQuery = countQuery + " AND ".join(queryFields) + ";"
+
+    if len(queryFields) > 0:        
+        resultsQuery = resultsQuery + "WHERE " + """ AND """.join(queryFields) + """;"""
+        countQuery = countQuery + "WHERE " +" AND ".join(queryFields) + ";"
     
     cursor.execute(countQuery)
     count = cursor.fetchone()
