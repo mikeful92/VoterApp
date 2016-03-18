@@ -1,5 +1,5 @@
 from bottle import route, run, template, post, request, static_file, response
-import sqlite3, json, os, sys
+import sqlite3, json, os, sys, re
 
 def setConnection(databasePath):
     connection = sqlite3.Connection(databasePath)
@@ -38,7 +38,6 @@ def sqlSearch(formData, full=False):
     gender = formData.get('gender')
     race = formData.get('race')
     party = formData.get('party')
-    areaCode = formData.get('areaCode')
     phoneNumber = formData.get('phoneNumber')
     email = formData.get('email')
     queryFields = []
@@ -91,9 +90,16 @@ def sqlSearch(formData, full=False):
 
     if zipCode != "":
         if zipCode == "*":
-            queryFields.append('ZipCode <> ""')
+                queryFields.append('ZipCode <> ""')
         else:
-            queryFields.append('ZipCode LIKE "' + zipCode.replace("*", "%") + '"')
+            zipCodes = zipCode.replace(' ', '').split(",")
+            if len(zipCodes) == 1:
+                queryFields.append('ZipCode LIKE "' + zipCode.replace("*", "%") + '"')
+            else:
+                zipQuery = []
+                for code in zipCodes:
+                    zipQuery.append('ZipCode LIKE "' + code.replace("*", "%") + '"')
+                queryFields.append('(' + ' OR '.join(zipQuery) + ')')
 
     if birthMonth != "" and birthYear != "":
         queryFields.append('BirthDate Like "' + birthMonth + '/_%_%/' + birthYear +'"')
@@ -120,18 +126,18 @@ def sqlSearch(formData, full=False):
             queryFields.append('PartyAffiliation = "' + party + '"')
 
 
-
-    if areaCode != "":
-        if areaCode == "*":
-            queryFields.append('PhoneAreaCode <> ""')
-        else:
-            queryFields.append('PhoneAreaCode = "' + areaCode + '"')
-
     if phoneNumber != "":
         if phoneNumber == "*":
             queryFields.append('PhoneNumber <> ""')
         else:
-            queryFields.append('PhoneNumber = "' + phoneNumber + '"')
+            numeric = re.compile(r'[^\d*]+')
+            cleanNumber = numeric.sub('',phoneNumber)
+            if len(cleanNumber) == 7:
+                queryFields.append('PhoneNumber LIKE "' + cleanNumber + '"')
+            elif len(cleanNumber) == 10:
+                queryFields.append('PhoneAreaCode LIKE "' + cleanNumber[:3] + '"')
+                queryFields.append('PhoneNumber LIKE "' + cleanNumber[3:] + '"')
+
 
     if email != "":
         if email == "*":
@@ -192,9 +198,9 @@ def listVoter():
     elif formData.get('type') == 'Lookup':
         results, count, error = sqlSearch(formData)
         if error != '':
-            output = template("response.tpl", rows = results, firstName= formData.get('firstName'), lastName=formData.get('lastName'), middleName=formData.get('middleName'), voterID=formData.get('voterID'), zipCode=formData.get('zipCode'), birthMonth=formData.get('birthMonth'), birthYear=formData.get('birthYear'), residenceAddress= formData.get('residenceAddress1'), city=formData.get('city'), gender=formData.get('gender'), race=formData.get('race'), party=formData.get('party'), areaCode=formData.get('areaCode'), phoneNumber=formData.get('phoneNumber'), email=formData.get('email'), regMonth=formData.get('regMonth'), regYear=formData.get('regYear'), count=count, error=error)
+            output = template("response.tpl", rows = results, firstName= formData.get('firstName'), lastName=formData.get('lastName'), middleName=formData.get('middleName'), voterID=formData.get('voterID'), zipCode=formData.get('zipCode'), birthMonth=formData.get('birthMonth'), birthYear=formData.get('birthYear'), residenceAddress= formData.get('residenceAddress1'), city=formData.get('city'), gender=formData.get('gender'), race=formData.get('race'), party=formData.get('party'),  phoneNumber=formData.get('phoneNumber'), email=formData.get('email'), regMonth=formData.get('regMonth'), regYear=formData.get('regYear'), count=count, error=error)
         else:
-            output = template("response.tpl", rows = results, firstName= formData.get('firstName'), lastName=formData.get('lastName'), middleName=formData.get('middleName'), voterID=formData.get('voterID'), zipCode=formData.get('zipCode'), birthMonth=formData.get('birthMonth'), birthYear=formData.get('birthYear'), residenceAddress= formData.get('residenceAddress1'), city=formData.get('city'), gender=formData.get('gender'), race=formData.get('race'), party=formData.get('party'), areaCode=formData.get('areaCode'), phoneNumber=formData.get('phoneNumber'), email=formData.get('email'), regMonth=formData.get('regMonth'), regYear=formData.get('regYear'), count=count)
+            output = template("response.tpl", rows = results, firstName= formData.get('firstName'), lastName=formData.get('lastName'), middleName=formData.get('middleName'), voterID=formData.get('voterID'), zipCode=formData.get('zipCode'), birthMonth=formData.get('birthMonth'), birthYear=formData.get('birthYear'), residenceAddress= formData.get('residenceAddress1'), city=formData.get('city'), gender=formData.get('gender'), race=formData.get('race'), party=formData.get('party'), phoneNumber=formData.get('phoneNumber'), email=formData.get('email'), regMonth=formData.get('regMonth'), regYear=formData.get('regYear'), count=count)
     else:
         output = "Error"
     

@@ -315,9 +315,6 @@
                         </div>
                         <div class="col-lg-1">
                             <div class="form-group">
-                                <input type="text" class="form-control input" name="areaCode" placeholder = "Area Code" value = "{{get ('areaCode','') }}">
-                            </div> 
-                            <div class="form-group">
                                 <input type="text" class="form-control input" name="phoneNumber" placeholder = "Phone" value = "{{get ('phoneNumber','')}}">
                             </div>
                             <div class="form-group">
