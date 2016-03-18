@@ -79,8 +79,7 @@ def sqlSearch(formData, full=False):
         else:
             addressList = address.split()
             for word in addressList:
-                if word != '':
-                    queryFields.append('instr(AddressLine1, "' + word + '") >0')
+                queryFields.append('instr(AddressLine1, "' + word + '") >0')
 
     if city != "":
         if city == "*":
