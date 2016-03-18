@@ -50,12 +50,12 @@
                     
                     <form class="form" action="/listVoter" METHOD="POST" enctype = "multipart/form-data" style="margin-bottom: 0;">
                     <div class="row">
-                        <div class="col-lg-1 col-lg-offset-1">
+                        <div class="col-lg-1">
                             <div class="input-group">
                                 <input type="text" class="form-control input" name="voterID" placeholder="Voter ID" value="{{ get('voterID','') }}">
                             </div>
                         </div>
-                        <div class="col-lg-2">
+                        <div class="col-lg-1">
                                 <div class="form-group">
                                 <input type="text" class="form-control input" name="firstName" placeholder="First Name" value="{{ get('firstName','') }}">
                                 </div>
@@ -67,8 +67,15 @@
                                 </div>
                         </div>
                         <div class="col-lg-2">
-                            <div class="input-group">
+                            <div class="form-group">
                                 <input type="text"  class="form-control input" name="residenceAddress1" placeholder="Residence Address" value="{{ get('residenceAddress','') }}" >
+                            </div>
+                            <div class="form-group">
+                                <input type="text"  class="form-control input" name="residenceAddress2" placeholder="Residence Address 2" value="{{ get('residenceAddress2','') }}" >
+                            </div>
+                        </div>
+                        <div class="col-lg-1">
+                            <div class="input-group">
                                 <input type="text"  class="form-control input" name="city" placeholder="City" value="{{ get('city','') }}">
                                 <select class="form-control input" name="countyCode" >
                                     <option value='PAL' selected>Palm Beach</option>
@@ -310,7 +317,220 @@
                                         <option value="9">Unknown</option>
                                     %end
                                 </select>
-                                <input type="text" class="form-control input" name="party" placeholder = "Party" value = "{{get ('party', '') }}">
+                                <select class="form-control input" name="party">
+                                    %if defined('party'):
+                                        % if party == "":
+                                            <option value="" selected>Any</option>
+                                            <option value="DEM">Florida Democratic Party</option>
+                                            <option value="NPA">No Party Affiliation</option>
+                                            <option value="REP">Republican Party of Florida</option>
+                                            <option value="AIP">American’s Party of Florida</option>
+                                            <option value="CPF">Constitution Party of Florida</option>                                            
+                                            <option value="ECO">Ecology Party of Florida</option>
+                                            <option value="GRE">Green Party of Florida</option>
+                                            <option value="IDP">Independence Party of Florida</option>
+                                            <option value="INT">Independent Party of Florida</option>
+                                            <option value="LPF">Libertarian Party of Florida</option>                                            
+                                            <option value="PSL">Party for Socialism and Liberation - Florida</option>
+                                            <option value="REF">Reform Party</option>                                            
+                                        %end
+                                        % if party == 'DEM':
+                                            <option value="">Any</option>
+                                            <option value="DEM" selected>Florida Democratic Party</option>
+                                            <option value="NPA">No Party Affiliation</option>
+                                            <option value="REP">Republican Party of Florida</option>
+                                            <option value="AIP">American’s Party of Florida</option>
+                                            <option value="CPF">Constitution Party of Florida</option>                                            
+                                            <option value="ECO">Ecology Party of Florida</option>
+                                            <option value="GRE">Green Party of Florida</option>
+                                            <option value="IDP">Independence Party of Florida</option>
+                                            <option value="INT">Independent Party of Florida</option>
+                                            <option value="LPF">Libertarian Party of Florida</option>                                            
+                                            <option value="PSL">Party for Socialism and Liberation - Florida</option>
+                                            <option value="REF">Reform Party</option> 
+                                        %end
+                                        % if party == 'NPA':
+                                            <option value="">Any</option>
+                                            <option value="DEM">Florida Democratic Party</option>
+                                            <option value="NPA" selected>No Party Affiliation</option>
+                                            <option value="REP">Republican Party of Florida</option>
+                                            <option value="AIP">American’s Party of Florida</option>
+                                            <option value="CPF">Constitution Party of Florida</option>                                            
+                                            <option value="ECO">Ecology Party of Florida</option>
+                                            <option value="GRE">Green Party of Florida</option>
+                                            <option value="IDP">Independence Party of Florida</option>
+                                            <option value="INT">Independent Party of Florida</option>
+                                            <option value="LPF">Libertarian Party of Florida</option>                                            
+                                            <option value="PSL">Party for Socialism and Liberation - Florida</option>
+                                            <option value="REF">Reform Party</option> 
+                                        %end
+                                        % if party == 'REP':
+                                            <option value="">Any</option>
+                                            <option value="DEM">Florida Democratic Party</option>
+                                            <option value="NPA">No Party Affiliation</option>
+                                            <option value="REP" selected>Republican Party of Florida</option>
+                                            <option value="AIP">American’s Party of Florida</option>
+                                            <option value="CPF">Constitution Party of Florida</option>                                            
+                                            <option value="ECO">Ecology Party of Florida</option>
+                                            <option value="GRE">Green Party of Florida</option>
+                                            <option value="IDP">Independence Party of Florida</option>
+                                            <option value="INT">Independent Party of Florida</option>
+                                            <option value="LPF">Libertarian Party of Florida</option>                                            
+                                            <option value="PSL">Party for Socialism and Liberation - Florida</option>
+                                            <option value="REF">Reform Party</option> 
+                                        %end
+                                        % if party == 'AIP':
+                                            <option value="">Any</option>
+                                            <option value="DEM">Florida Democratic Party</option>
+                                            <option value="NPA">No Party Affiliation</option>
+                                            <option value="REP">Republican Party of Florida</option>
+                                            <option value="AIP" selected>American’s Party of Florida</option>
+                                            <option value="CPF">Constitution Party of Florida</option>                                            
+                                            <option value="ECO">Ecology Party of Florida</option>
+                                            <option value="GRE">Green Party of Florida</option>
+                                            <option value="IDP">Independence Party of Florida</option>
+                                            <option value="INT">Independent Party of Florida</option>
+                                            <option value="LPF">Libertarian Party of Florida</option>                                            
+                                            <option value="PSL">Party for Socialism and Liberation - Florida</option>
+                                            <option value="REF">Reform Party</option> 
+                                        %end
+                                        % if party == 'CPF':
+                                            <option value="">Any</option>
+                                            <option value="DEM">Florida Democratic Party</option>
+                                            <option value="NPA">No Party Affiliation</option>
+                                            <option value="REP">Republican Party of Florida</option>
+                                            <option value="AIP">American’s Party of Florida</option>
+                                            <option value="CPF" selected>Constitution Party of Florida</option>                                           
+                                            <option value="ECO">Ecology Party of Florida</option>
+                                            <option value="GRE">Green Party of Florida</option>
+                                            <option value="IDP">Independence Party of Florida</option>
+                                            <option value="INT">Independent Party of Florida</option>
+                                            <option value="LPF">Libertarian Party of Florida</option>                                            
+                                            <option value="PSL">Party for Socialism and Liberation - Florida</option>
+                                            <option value="REF">Reform Party</option> 
+                                        %end
+                                        % if party == 'ECO':
+                                            <option value="">Any</option>
+                                            <option value="DEM">Florida Democratic Party</option>
+                                            <option value="NPA">No Party Affiliation</option>
+                                            <option value="REP">Republican Party of Florida</option>
+                                            <option value="AIP">American’s Party of Florida</option>
+                                            <option value="CPF">Constitution Party of Florida</option>                                            
+                                            <option value="ECO" selected>Ecology Party of Florida</option>
+                                            <option value="GRE">Green Party of Florida</option>
+                                            <option value="IDP">Independence Party of Florida</option>
+                                            <option value="INT">Independent Party of Florida</option>
+                                            <option value="LPF">Libertarian Party of Florida</option>                                            
+                                            <option value="PSL">Party for Socialism and Liberation - Florida</option>
+                                            <option value="REF">Reform Party</option> 
+                                        %end
+                                        % if party == 'GRE':
+                                            <option value="">Any</option>
+                                            <option value="DEM">Florida Democratic Party</option>
+                                            <option value="NPA">No Party Affiliation</option>
+                                            <option value="REP">Republican Party of Florida</option>
+                                            <option value="AIP">American’s Party of Florida</option>
+                                            <option value="CPF">Constitution Party of Florida</option>                                            
+                                            <option value="ECO">Ecology Party of Florida</option>
+                                            <option value="GRE" selected>Green Party of Florida</option>
+                                            <option value="IDP">Independence Party of Florida</option>
+                                            <option value="INT">Independent Party of Florida</option>
+                                            <option value="LPF">Libertarian Party of Florida</option>                                            
+                                            <option value="PSL">Party for Socialism and Liberation - Florida</option>
+                                            <option value="REF">Reform Party</option> 
+                                        %end
+                                        % if party == 'IDP':
+                                            <option value="">Any</option>
+                                            <option value="DEM">Florida Democratic Party</option>
+                                            <option value="NPA">No Party Affiliation</option>
+                                            <option value="REP">Republican Party of Florida</option>
+                                            <option value="AIP">American’s Party of Florida</option>
+                                            <option value="CPF">Constitution Party of Florida</option>                                            
+                                            <option value="ECO">Ecology Party of Florida</option>
+                                            <option value="GRE">Green Party of Florida</option>
+                                            <option value="IDP" selected>Independence Party of Florida</option>
+                                            <option value="INT">Independent Party of Florida</option>
+                                            <option value="LPF">Libertarian Party of Florida</option>                                            
+                                            <option value="PSL">Party for Socialism and Liberation - Florida</option>
+                                            <option value="REF">Reform Party</option> 
+                                        %end
+                                        % if party == 'INT':
+                                            <option value="">Any</option>
+                                            <option value="DEM">Florida Democratic Party</option>
+                                            <option value="NPA">No Party Affiliation</option>
+                                            <option value="REP">Republican Party of Florida</option>
+                                            <option value="AIP">American’s Party of Florida</option>
+                                            <option value="CPF">Constitution Party of Florida</option>                                            
+                                            <option value="ECO">Ecology Party of Florida</option>
+                                            <option value="GRE">Green Party of Florida</option>
+                                            <option value="IDP">Independence Party of Florida</option>
+                                            <option value="INT" selected>Independent Party of Florida</option>
+                                            <option value="LPF">Libertarian Party of Florida</option>                                            
+                                            <option value="PSL">Party for Socialism and Liberation - Florida</option>
+                                            <option value="REF">Reform Party</option> 
+                                        %end
+                                        % if party == 'LPF':
+                                            <option value="">Any</option>
+                                            <option value="DEM">Florida Democratic Party</option>
+                                            <option value="NPA">No Party Affiliation</option>
+                                            <option value="REP">Republican Party of Florida</option>
+                                            <option value="AIP">American’s Party of Florida</option>
+                                            <option value="CPF">Constitution Party of Florida</option>                                            
+                                            <option value="ECO">Ecology Party of Florida</option>
+                                            <option value="GRE">Green Party of Florida</option>
+                                            <option value="IDP">Independence Party of Florida</option>
+                                            <option value="INT">Independent Party of Florida</option>
+                                            <option value="LPF" selected>Libertarian Party of Florida</option>                                            
+                                            <option value="PSL">Party for Socialism and Liberation - Florida</option>
+                                            <option value="REF">Reform Party</option> 
+                                        %end
+                                        % if party == 'PSL':
+                                            <option value="">Any</option>
+                                            <option value="DEM">Florida Democratic Party</option>
+                                            <option value="NPA">No Party Affiliation</option>
+                                            <option value="REP">Republican Party of Florida</option>
+                                            <option value="AIP">American’s Party of Florida</option>
+                                            <option value="CPF">Constitution Party of Florida</option>                                            
+                                            <option value="ECO">Ecology Party of Florida</option>
+                                            <option value="GRE">Green Party of Florida</option>
+                                            <option value="IDP">Independence Party of Florida</option>
+                                            <option value="INT">Independent Party of Florida</option>
+                                            <option value="LPF">Libertarian Party of Florida</option>                                            
+                                            <option value="PSL" selected>Party for Socialism and Liberation - Florida</option>
+                                            <option value="REF">Reform Party</option> 
+                                        %end
+                                        % if party == 'REF':
+                                            <option value="">Any</option>
+                                            <option value="DEM">Florida Democratic Party</option>
+                                            <option value="NPA">No Party Affiliation</option>
+                                            <option value="REP">Republican Party of Florida</option>
+                                            <option value="AIP">American’s Party of Florida</option>
+                                            <option value="CPF">Constitution Party of Florida</option>                                            
+                                            <option value="ECO">Ecology Party of Florida</option>
+                                            <option value="GRE">Green Party of Florida</option>
+                                            <option value="IDP">Independence Party of Florida</option>
+                                            <option value="INT">Independent Party of Florida</option>
+                                            <option value="LPF">Libertarian Party of Florida</option>                                            
+                                            <option value="PSL">Party for Socialism and Liberation - Florida</option>
+                                            <option value="REF" selected>Reform Party</option> 
+                                        %end
+                                    %end
+                                    %if not defined('party'):
+                                        <option value="" selected>Any</option>
+                                        <option value="DEM">Florida Democratic Party</option>
+                                        <option value="NPA">No Party Affiliation</option>
+                                        <option value="REP">Republican Party of Florida</option>
+                                        <option value="AIP">American’s Party of Florida</option>
+                                        <option value="CPF">Constitution Party of Florida</option>                                            
+                                        <option value="ECO">Ecology Party of Florida</option>
+                                        <option value="GRE">Green Party of Florida</option>
+                                        <option value="IDP">Independence Party of Florida</option>
+                                        <option value="INT">Independent Party of Florida</option>
+                                        <option value="LPF">Libertarian Party of Florida</option>                                            
+                                        <option value="PSL">Party for Socialism and Liberation - Florida</option>
+                                        <option value="REF">Reform Party</option> 
+                                    %end
+                                </select>
                             </div>
                         </div>
                         <div class="col-lg-1">

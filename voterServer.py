@@ -101,12 +101,24 @@ def sqlSearch(formData, full=False):
                     zipQuery.append('ZipCode LIKE "' + code.replace("*", "%") + '"')
                 queryFields.append('(' + ' OR '.join(zipQuery) + ')')
 
-    if birthMonth != "" and birthYear != "":
-        queryFields.append('BirthDate Like "' + birthMonth + '/_%_%/' + birthYear +'"')
-    elif birthMonth == "" and birthYear != "":
-        queryFields.append('BirthDate LIKE "_%_%/_%_%/' + birthYear + '"')
-    elif birthMonth != "" and birthYear == "":
-        queryFields.append('BirthDate LIKE "' + birthMonth + '/_%_%/_%_%_%_%"')
+    if "," in birthYear:
+        years = birthYear.split(',')
+        yearQuery = []
+        if birthMonth != "":
+            month = birthMonth
+        else:
+            month = "_%_%"
+        for year in years:
+            yearQuery.append('BirthDate LIKE "' + month + '/_%_%/' + year + '"')
+        queryFields.append('(' + ' OR '.join(yearQuery) + ')')
+         
+    else:
+        if birthMonth != "" and birthYear != "":
+            queryFields.append('BirthDate Like "' + birthMonth + '/_%_%/' + birthYear +'"')
+        elif birthMonth == "" and birthYear != "":
+            queryFields.append('BirthDate LIKE "_%_%/_%_%/' + birthYear + '"')
+        elif birthMonth != "" and birthYear == "":
+            queryFields.append('BirthDate LIKE "' + birthMonth + '/_%_%/_%_%_%_%"')
 
     if regMonth != "" and regYear != "":
         queryFields.append('RegistrationDate Like "' + regMonth + '/_%_%/' + regYear +'"')
