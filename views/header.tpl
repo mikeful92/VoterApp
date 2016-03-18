@@ -196,7 +196,120 @@
                                         <option value="U">Unknown</option>
                                     %end
                                 </select>
-                                <input type="text" class="form-control input" name="race" placeholder = "Race" value = "{{get ('race', '') }}">
+                                <select class="form-control input" name="race">
+                                    %if defined('race'):
+                                        % if race == "":
+                                            <option value="" selected>Any</option>
+                                            <option value="1">American Indian</option>
+                                            <option value='2'>Asian</option>
+                                            <option value="3">Black</option>
+                                            <option value="4">Hispanic</option>
+                                            <option value="5">White</option>
+                                            <option value="6">Other</option>
+                                            <option value="7">Multi-racial</option>
+                                            <option value="9">Unknown</option>
+                                        %end
+                                        % if race == '1':
+                                            <option value="">Any</option>
+                                            <option value="1" selected>American Indian</option>
+                                            <option value='2'>Asian</option>
+                                            <option value="3">Black</option>
+                                            <option value="4">Hispanic</option>
+                                            <option value="5">White</option>
+                                            <option value="6">Other</option>
+                                            <option value="7">Multi-racial</option>
+                                            <option value="9">Unknown</option>
+                                        %end
+                                        % if race == '2':
+                                            <option value="">Any</option>
+                                            <option value="1" >American Indian</option>
+                                            <option value='2'selected>Asian</option>
+                                            <option value="3">Black</option>
+                                            <option value="4">Hispanic</option>
+                                            <option value="5">White</option>
+                                            <option value="6">Other</option>
+                                            <option value="7">Multi-racial</option>
+                                            <option value="9">Unknown</option>
+                                        %end
+                                        % if race == '3':
+                                            <option value="">Any</option>
+                                            <option value="1">American Indian</option>
+                                            <option value='2'>Asian</option>
+                                            <option value="3" selected>Black</option>
+                                            <option value="4">Hispanic</option>
+                                            <option value="5">White</option>
+                                            <option value="6">Other</option>
+                                            <option value="7">Multi-racial</option>
+                                            <option value="9">Unknown</option>
+                                        %end
+                                        % if race == '4':
+                                            <option value="">Any</option>
+                                            <option value="1">American Indian</option>
+                                            <option value='2'>Asian</option>
+                                            <option value="3">Black</option>
+                                            <option value="4" selected>Hispanic</option>
+                                            <option value="5">White</option>
+                                            <option value="6">Other</option>
+                                            <option value="7">Multi-racial</option>
+                                            <option value="9">Unknown</option>
+                                        %end
+                                        % if race == '5':
+                                            <option value="">Any</option>
+                                            <option value="1">American Indian</option>
+                                            <option value='2'>Asian</option>
+                                            <option value="3">Black</option>
+                                            <option value="4">Hispanic</option>
+                                            <option value="5" selected>White</option>
+                                            <option value="6">Other</option>
+                                            <option value="7">Multi-racial</option>
+                                            <option value="9">Unknown</option>
+                                        %end
+                                        % if race == '6':
+                                            <option value="">Any</option>
+                                            <option value="1">American Indian</option>
+                                            <option value='2'>Asian</option>
+                                            <option value="3">Black</option>
+                                            <option value="4">Hispanic</option>
+                                            <option value="5">White</option>
+                                            <option value="6" selected>Other</option>
+                                            <option value="7">Multi-racial</option>
+                                            <option value="9">Unknown</option>
+                                        %end
+                                        % if race == '7':
+                                            <option value="">Any</option>
+                                            <option value="1">American Indian</option>
+                                            <option value='2'>Asian</option>
+                                            <option value="3">Black</option>
+                                            <option value="4">Hispanic</option>
+                                            <option value="5">White</option>
+                                            <option value="6">Other</option>
+                                            <option value="7" selected>Multi-racial</option>
+                                            <option value="9">Unknown</option>
+                                        %end
+                                        % if race == '9':
+                                            <option value="">Any</option>
+                                            <option value="1">American Indian</option>
+                                            <option value='2'>Asian</option>
+                                            <option value="3">Black</option>
+                                            <option value="4">Hispanic</option>
+                                            <option value="5">White</option>
+                                            <option value="6">Other</option>
+                                            <option value="7">Multi-racial</option>
+                                            <option value="9" selected>Unknown</option>
+                                        %end
+                                    %end
+                                    %if not defined('race'):
+                                        <option value="" selected>Any</option>
+                                        <option value="1">American Indian</option>
+                                        <option value='2'>Asian</option>
+                                        <option value="3">Black</option>
+                                        <option value="4">Hispanic</option>
+                                        <option value="5">White</option>
+                                        <option value="6">Other</option>
+                                        <option value="7">Multi-racial</option>
+                                        <option value="9">Unknown</option>
+                                    %end
+                                </select>
                                 <input type="text" class="form-control input" name="party" placeholder = "Party" value = "{{get ('party', '') }}">
                             </div>
                         </div>

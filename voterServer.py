@@ -71,8 +71,16 @@ def sqlSearch(formData, full=False):
         else:
             queryFields.append('MiddleName = "' + middleName + '"')
 
-    if address != "":
-        queryFields.append('AddressLine1 = "' + address + '"')
+    if address != "" and address != None:
+        if address == "*":
+            queryFields.append('AddressLine1 <> ""')
+        elif "*" in address:
+            queryFields.append('AddressLine1 LIKE "' + address.replace("*","%") + '"')
+        else:
+            addressList = address.split()
+            for word in addressList:
+                if word != '':
+                    queryFields.append('instr(AddressLine1, "' + word + '") >0')
 
     if city != "":
         if city == "*":
@@ -93,7 +101,7 @@ def sqlSearch(formData, full=False):
     if zipCode != "":
         if zipCode == "*":
             queryFields.append('ZipCode <> ""')
-        if "*" in zipCode:
+        elif "*" in zipCode:
             queryFields.append('ZipCode LIKE "' + zipCode.replace("*", "%") + '"')
         else:
             queryFields.append('ZipCode = "' + zipCode + '"')
@@ -114,13 +122,13 @@ def sqlSearch(formData, full=False):
         queryFields.append('RegistrationDate LIKE "' + regMonth + '/_%_%/_%_%_%_%"')
 
 
-    if gender != "":
+    if gender != "" and gender != None:
         if gender == "*":
             queryFields.append('Gender <> ""')
         else:
             queryFields.append('Gender = "' + gender + '"')
 
-    if race != "":
+    if race != "" and race != None:
         queryFields.append('Race = "' + race + '"')
 
     if party != "":
@@ -238,7 +246,7 @@ def listAddress(address):
     countQuery = "SELECT COUNT(*) FROM VOTERS WHERE AddressLine1 = ?"
     cursor.execute(countQuery, [address])
     count = cursor.fetchone()
-
+    print(resultsQuery)
     cursor.execute(resultsQuery, [address])
     results = cursor.fetchmany(25)
 
