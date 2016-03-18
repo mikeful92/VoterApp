@@ -1,6 +1,5 @@
 from bottle import route, run, template, post, request, static_file, response
-import sqlite3, json, os, sys, csv
-from io import BytesIO
+import sqlite3, json, os, sys
 
 def setConnection(databasePath):
     connection = sqlite3.Connection(databasePath)
@@ -25,9 +24,9 @@ def sqlSearch(formData, full=False):
     countQuery = "SELECT COUNT(*) FROM VOTERS WHERE "
 
     voterID = formData.get('voterID')
-    firstName = formData.get('firstName').upper()
-    lastName = formData.get('lastName').upper()
-    middleName = formData.get('middleName').upper()
+    firstName = formData.get('firstName')
+    lastName = formData.get('lastName')
+    middleName = formData.get('middleName')
     address = formData.get('residenceAddress1').upper()
     city = formData.get('city').upper()
     countyCode = formData.get('countyCode')
@@ -50,26 +49,20 @@ def sqlSearch(formData, full=False):
     if firstName != "":
         if firstName == "*":
             queryFields.append('FirstName <> ""')
-        elif "*" in firstName:
-            queryFields.append('FirstName LIKE "' + firstName.replace("*", "%") + '"')
         else:
-            queryFields.append('FirstName = "' + firstName + '"')
+            queryFields.append('FirstName LIKE "' + firstName.replace("*", "%") + '"')
 
     if lastName != "":
         if lastName == "*":
             queryFields.append('LastName <> ""')
-        elif "*" in lastName:
-            queryFields.append('LastName LIKE "' + lastName.replace("*", "%") + '"')
         else:
-            queryFields.append('LastName = "' + lastName + '"')
+            queryFields.append('LastName LIKE "' + lastName.replace("*", "%") + '"')
 
     if middleName != "":
         if middleName == "*":
             queryFields.append('MiddleName <> ""')
-        elif "*" in middleName:
-            queryFields.append('MiddleName LIKE "' + middleName.replace("*", "%") + '"')
         else:
-            queryFields.append('MiddleName = "' + middleName + '"')
+            queryFields.append('MiddleName LIKE "' + middleName.replace("*", "%") + '"')
 
     if address != "" and address != None:
         if address == "*":
@@ -84,10 +77,9 @@ def sqlSearch(formData, full=False):
     if city != "":
         if city == "*":
             queryFields.append('City <> ""')
-        elif "*" in city:
-            queryFields.append('City LIKE "' + city.replace("*", "%") + '"')
         else:
-            queryFields.append('City = "' + city + '"')
+            queryFields.append('City LIKE "' + city.replace("*", "%") + '"')
+
 
     # if countyCode:
     #     if countyCode == "*":
@@ -100,11 +92,8 @@ def sqlSearch(formData, full=False):
     if zipCode != "":
         if zipCode == "*":
             queryFields.append('ZipCode <> ""')
-        elif "*" in zipCode:
-            queryFields.append('ZipCode LIKE "' + zipCode.replace("*", "%") + '"')
         else:
-            queryFields.append('ZipCode = "' + zipCode + '"')
-
+            queryFields.append('ZipCode LIKE "' + zipCode.replace("*", "%") + '"')
 
     if birthMonth != "" and birthYear != "":
         queryFields.append('BirthDate Like "' + birthMonth + '/_%_%/' + birthYear +'"')
@@ -122,19 +111,15 @@ def sqlSearch(formData, full=False):
 
 
     if gender != "" and gender != None:
-        if gender == "*":
-            queryFields.append('Gender <> ""')
-        else:
-            queryFields.append('Gender = "' + gender + '"')
+        queryFields.append('Gender = "' + gender + '"')
 
     if race != "" and race != None:
         queryFields.append('Race = "' + race + '"')
 
-    if party != "":
-        if party == "*":
-            queryFields.append('PartyAffiliation <> ""')
-        else:
+    if party != "" and party != None:
             queryFields.append('PartyAffiliation = "' + party + '"')
+
+
 
     if areaCode != "":
         if areaCode == "*":
@@ -151,10 +136,8 @@ def sqlSearch(formData, full=False):
     if email != "":
         if email == "*":
             queryFields.append('Email <> ""')
-        elif "*" in email:
-            queryFields.append('Email LIKE "' + email.replace("*","%") + '"')
         else:
-            queryFields.append('Email = "' + email + '"')
+            queryFields.append('Email LIKE "' + email.replace("*","%") + '"')
 
 
     if len(queryFields) == 0:
