@@ -29,7 +29,7 @@
             <div class="container">
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li><a class="navbar-brand" href="/">Florida Voter Search - Palm Beach Only</a></li>
+                        <li><a class="navbar-brand" href="/">Florida Voter Search - v10 - Statewide</a></li>
                     </ul>
                 </div>
             </div>
