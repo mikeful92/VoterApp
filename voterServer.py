@@ -91,14 +91,9 @@ def sqlSearch(formData, full=False):
             queryFields.append('City LIKE "' + city.replace("*", "%") + '"')
 
 
-    # if countyCode:
-    #     if countyCode == "*":
-    #         queryFields.append('CountyCode <> ""')
-    #     elif "*" in countyCode:
-    #         queryFields.append('CountyCode LIKE "' + countyCode.replace("*", "%") + '"')
-    #     else:
-    #         queryFields.append('CountyCode = "' + countyCode + '"')
-
+    if countyCode != "":
+        queryFields.append('CountyCode = "' + countyCode + '"')
+    
     if zipCode != "":
         if zipCode == "*":
                 queryFields.append('ZipCode <> ""')
