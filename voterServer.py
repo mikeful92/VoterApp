@@ -113,7 +113,7 @@ def sqlSearch(formData, full=False):
                 queryFields.append('(' + ' OR '.join(zipQuery) + ')')
 
     if "," in birthYear:
-        years = birthYear.split(',')
+        years = birthYear.replace("*","%").split(',')
         yearQuery = []
         if birthMonth != "":
             month = birthMonth
@@ -125,9 +125,9 @@ def sqlSearch(formData, full=False):
 
     else:
         if birthMonth != "" and birthYear != "":
-            queryFields.append('BirthDate Like "' + birthMonth + '/_%_%/' + birthYear +'"')
+            queryFields.append('BirthDate Like "' + birthMonth + '/_%_%/' + birthYear.replace("*","%") +'"')
         elif birthMonth == "" and birthYear != "":
-            queryFields.append('BirthDate LIKE "_%_%/_%_%/' + birthYear + '"')
+            queryFields.append('BirthDate LIKE "_%_%/_%_%/' + birthYear.replace("*","%") + '"')
         elif birthMonth != "" and birthYear == "":
             queryFields.append('BirthDate LIKE "' + birthMonth + '/_%_%/_%_%_%_%"')
 
