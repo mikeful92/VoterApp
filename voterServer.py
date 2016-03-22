@@ -20,8 +20,12 @@ def sqlSearch(formData, full=False):
     cursor = connection.cursor()
     error = ""
 
-    resultsQuery = """SELECT * FROM VOTERS """
-    countQuery = "SELECT COUNT(*) FROM VOTERS "
+    resultsQuery = ("SELECT FirstName, MiddleName, LastName, " +
+                    "AddressLine1, AddressLine2, City, CountyCode, Zipcode, "+
+                    "BirthDate, PartyAffiliation, VoterID " + 
+                    "FROM VOTERS ")
+
+    countQuery = "SELECT COUNT(LastName) FROM VOTERS "
 
     voterID = formData.get('voterID')
     firstName = formData.get('firstName')
@@ -93,7 +97,7 @@ def sqlSearch(formData, full=False):
 
     if countyCode != "":
         queryFields.append('CountyCode = "' + countyCode + '"')
-    
+
     if zipCode != "":
         if zipCode == "*":
                 queryFields.append('ZipCode <> ""')

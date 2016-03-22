@@ -4,7 +4,7 @@
         <div class="well">
             % if defined('count'):
                 <div class="panel">
-                    <p>Total results: {{count['COUNT(*)']}}</p>
+                    <p>Total results: {{count['COUNT(LastName)']}}</p>
                 </div>
             % end
             <table id="results" class="table table-striped display">
