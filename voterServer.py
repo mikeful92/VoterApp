@@ -251,7 +251,7 @@ def listAddress(address):
             "VoterID, BirthDate, PartyAffiliation " + 
             "FROM VOTERS " +
             "WHERE AddressLine1 = ?")
-    countQuery = "SELECT COUNT(*) FROM VOTERS WHERE AddressLine1 = ?"
+    countQuery = "SELECT COUNT(LastName) FROM VOTERS WHERE AddressLine1 = ?"
     cursor.execute(countQuery, [address])
     count = cursor.fetchone()
     print(resultsQuery)
