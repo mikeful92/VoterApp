@@ -64,21 +64,16 @@
                     
                     <form class="form" action="/listVoter" METHOD="POST" enctype = "multipart/form-data" style="margin-bottom: 0;">
                     <div class="row">
-                        <div class="col-lg-1 col-lg-offset-1">
-                            <div class="input-group">
-                                <input type="text" class="form-control input" name="voterID" placeholder="Voter ID" value="{{ get('voterID','') }}">
-                            </div>
-                        </div>
-                        <div class="col-lg-1">
-                                <div class="form-group">
+                        <div class="col-lg-2">
+                            <div class="form-group">
                                 <input type="text" class="form-control input" name="firstName" placeholder="First Name" value="{{ get('firstName','') }}">
-                                </div>
-                                <div class="form-group">
+                            </div>
+                            <div class="form-group">
                                 <input type="text" class="form-control input" name="lastName" placeholder="Last Name" value="{{ get('lastName','') }}">
-                                </div>
-                                <div class="form-group">
+                            </div>
+                            <div class="form-group">
                                 <input type="text"  class="form-control input"name="middleName" placeholder="Middle Name" value="{{ get('middleName','') }}">
-                                </div>
+                            </div>
                         </div>
                         <div class="col-lg-2">
                             <div class="form-group">
@@ -88,8 +83,6 @@
                             <div class="form-group">
                                 <input type="text"  class="form-control input" name="residenceAddress2" placeholder="Residence Address 2" value="{{ get('residenceAddress2','') }}" >
                             </div>
-                        </div>
-                        <div class="col-lg-1">
                             <div class="form-group">
                                 <input type="text"  class="form-control input" name="city" placeholder="City" value="{{ get('city','') }}">
                             </div>
@@ -173,15 +166,13 @@
                                 <input type="text" class="form-control input" name="zipCode" placeholder="ZipCode" value="{{ get('zipCode','') }}">
                             </div>
                         </div>
-                        <div class="col-lg-1">
+                        <div class="col-lg-2">
                             <div class="form-group">
                                 <input type="text" class="form-control input" name="birthMonth" placeholder="Birth Month" value="{{ get('birthMonth','') }}">
                             </div>
                             <div class="form-group">
                                 <input type="text" class="form-control input" name="birthYear" placeholder="Birth Year" value="{{ get('birthYear','')}}">
                             </div>
-                        </div>
-                        <div class="col-lg-1">
                             <div class="form-group">
                                 <input type="text" class="form-control input" name="regMonth" placeholder="Reg. Month" value="{{ get('regMonth','') }}">
                             </div>
@@ -189,7 +180,7 @@
                                 <input type="text" class="form-control input" name="regYear" placeholder="Reg. Year" value="{{ get('regYear','')}}">
                             </div>
                         </div>
-                        <div class="col-lg-1">
+                        <div class="col-lg-2">
                             <div class="form-group">
                                 <select class="form-control input" name="gender">
                                     %if defined('gender'):
@@ -559,12 +550,15 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-lg-1">
+                        <div class="col-lg-2">
                             <div class="form-group">
                                 <input type="text" class="form-control input" name="phoneNumber" placeholder = "Phone" value = "{{get ('phoneNumber','')}}">
                             </div>
                             <div class="form-group">
                                 <input type="text" class="form-control input" name="email" placeholder = "E-mail" value = "{{get ('email','')}}">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control input" name="voterID" placeholder="Voter ID" value="{{ get('voterID','') }}">
                             </div>
                         </div>
                         <div class="col-lg-1">
