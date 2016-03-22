@@ -13,13 +13,11 @@
                         <th>First Name</th>
                         <th>Middle Name</th>
                         <th>Last Name</th>
-                        <th>Suffix</th>
                         <th>Address Line 1</th>
                         <th>Address Line 2</th>
                         <th>City</th>
                         <th>County</th>
                         <th>Zip Code</th>
-                        <th>Voter ID</th>
                         <th>Date of Birth</th>
                         <th>Party</th>
                         <th></th>
@@ -31,13 +29,11 @@
                             <td>{{row['FirstName']}}</td>
                             <td>{{row['MiddleName']}}</td>
                             <td>{{row['LastName']}}</td>
-                            <td>{{row['Suffix']}}</td>
                             <td>{{row['AddressLine1']}}</td>
                             <td>{{row['AddressLine2']}}</td>
                             <td>{{row['City']}}</td>
                             <td>{{row['CountyCode']}}</td>
                             <td>{{row['Zipcode']}}</td>
-                            <td>{{row['VoterID']}}</td>
                             <td>{{row['BirthDate']}}</td>
                             <td>{{row['PartyAffiliation']}}</td>
                             <td>
