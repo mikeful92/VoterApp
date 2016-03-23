@@ -4,11 +4,17 @@
         <div class="well">
             % if defined('count'):
                 <div class="panel">
-                    <h4>Total results: {{count}}
-                    % if defined('time'):
-                        Search Time: {{time}} 
-                    % end
-                    </h4>
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <h4>Total results: {{count}}</h4>
+                        </div>
+                        % if defined('time'):
+                            <div class="col-lg-2 col-lg-offset-8">
+                                <h4>Search Time: {{time}}</h4>
+                            </div>
+                        % end
+                        </h4>
+                    </div>
                 </div>
             % end
             <table id="results" class="table table-striped display">

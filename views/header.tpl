@@ -29,7 +29,7 @@
             <div class="container">
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li><a class="navbar-brand" href="/">Florida Voter Search - v10 - Statewide</a></li>
+                        <li><a class="navbar-brand" href="/">Florida Voter Search - v11 - Statewide - March 2016 extract</a></li>
                     </ul>
                 </div>
             </div>
@@ -40,9 +40,7 @@
                     <ul>
                         <li>Fields are NOT case-senstive</li>
                         <li>All non-date fields accept multiple wildcard(*)</li>
-                        <li>Address 1 and 2 try to find a close match if no wild cards are used</li>
                     </ul>
-
                 </div>
                 <div class="col-lg-4">
                     <ul>

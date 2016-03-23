@@ -8,7 +8,10 @@
         $(document).ready(function() {
             $("#results").DataTable({
                 "dom": 'lfrtip',
-                "lengthMenu": [100, 250, 500]
+                "lengthMenu": [100, 250, 500],
+                "oLanguage": {
+                "sSearch": "Search results:"
+                }
             });
         } );
     </script>
