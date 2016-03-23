@@ -14,10 +14,13 @@ def dict_factory(cursor, row):
     return d
 
 def sqlSearch(formData, full=False):
+    startTime = time.time()
     connection = sqlite3.Connection('../Data/DB.sqlite')
     if not full:
         connection.row_factory = dict_factory
     cursor = connection.cursor()
+    print("DB connection time: {}".format(time.time() - startTime))
+    startTime = time.time()
     error = ""
 
     resultsQuery = ("SELECT FirstName, MiddleName, LastName, " +
@@ -172,17 +175,26 @@ def sqlSearch(formData, full=False):
     if len(queryFields) > 0:        
         resultsQuery = resultsQuery + "WHERE " + """ AND """.join(queryFields) + """;"""
         countQuery = countQuery + "WHERE " +" AND ".join(queryFields) + ";"
-    
+    print("Query creation time: {}".format(time.time() - startTime))
+    startTime = time.time()
+
     cursor.execute(countQuery)
+    print("Count execute time: {}".format(time.time() - startTime))
+    startTime = time.time()
     count = cursor.fetchone()
+    print("Count fetch time: {}".format(time.time() - startTime))
+    startTime = time.time()
 
     print(resultsQuery)
     cursor.execute(resultsQuery)
+    print("Query execute time: {}".format(time.time() - startTime))
+    startTime = time.time()
     if full:
         results = cursor.fetchall()
     else:
         results = cursor.fetchmany(500)
-
+    print("Query fetch time: {}".format(time.time() - startTime))
+    startTime = time.time()
     cursor.close()
 
     return results, count, error
@@ -199,7 +211,6 @@ def home():
 
 @post('/listVoter')
 def listVoter():
-    startTime = time.time()
     formData = request.forms
     if formData.get('type') == 'Export':
         results, count, error = sqlSearch(formData, True)
@@ -224,7 +235,6 @@ def listVoter():
             output = template("response.tpl", rows = results, firstName= formData.get('firstName'), lastName=formData.get('lastName'), middleName=formData.get('middleName'), voterID=formData.get('voterID'), zipCode=formData.get('zipCode'), birthMonth=formData.get('birthMonth'), birthYear=formData.get('birthYear'), residenceAddress= formData.get('residenceAddress1'), residenceAddress2= formData.get('residenceAddress2'), city=formData.get('city'), gender=formData.get('gender'), race=formData.get('race'), party=formData.get('party'), phoneNumber=formData.get('phoneNumber'), email=formData.get('email'), regMonth=formData.get('regMonth'), regYear=formData.get('regYear'), count=count)
     else:
         output = "Error"
-    print(time.time() - startTime)
     return output
 
 
