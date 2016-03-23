@@ -1,5 +1,5 @@
 from bottle import route, run, template, post, request, static_file, response
-import sqlite3, json, os, sys, re
+import sqlite3, json, os, sys, re, time
 
 def setConnection(databasePath):
     connection = sqlite3.Connection(databasePath)
@@ -199,6 +199,7 @@ def home():
 
 @post('/listVoter')
 def listVoter():
+    startTime = time.time()
     formData = request.forms
     if formData.get('type') == 'Export':
         results, count, error = sqlSearch(formData, True)
@@ -213,7 +214,7 @@ def listVoter():
 
         response.headers['Content-Type'] = 'application/csv; charset=UTF-8'
         response.headers['Content-Disposition'] = 'attachment; filename=export.txt'
-        return output
+
 
     elif formData.get('type') == 'Lookup':
         results, count, error = sqlSearch(formData)
@@ -223,7 +224,7 @@ def listVoter():
             output = template("response.tpl", rows = results, firstName= formData.get('firstName'), lastName=formData.get('lastName'), middleName=formData.get('middleName'), voterID=formData.get('voterID'), zipCode=formData.get('zipCode'), birthMonth=formData.get('birthMonth'), birthYear=formData.get('birthYear'), residenceAddress= formData.get('residenceAddress1'), residenceAddress2= formData.get('residenceAddress2'), city=formData.get('city'), gender=formData.get('gender'), race=formData.get('race'), party=formData.get('party'), phoneNumber=formData.get('phoneNumber'), email=formData.get('email'), regMonth=formData.get('regMonth'), regYear=formData.get('regYear'), count=count)
     else:
         output = "Error"
-    
+    print(time.time() - startTime)
     return output
 
 
