@@ -18,7 +18,12 @@ def timeit(startTime):
     return time.time()
 
 def queryGeneration(formData):
-    resultsQuery = ("SELECT *, COUNT(LastName) FROM VOTERS ")
+    resultsQuery = ("SELECT FirstName, MiddleName, LastName, " +
+                    "AddressLine1, AddressLine2, City, CountyCode, Zipcode, "+
+                    "BirthDate, PartyAffiliation, VoterID " + 
+                    "FROM VOTERS ")
+
+    countQuery = "SELECT COUNT(LastName) FROM VOTERS "
 
     voterID = formData.get('voterID')
     firstName = formData.get('firstName')
@@ -164,16 +169,20 @@ def queryGeneration(formData):
 
     if len(queryFields) > 0:        
         resultsQuery = resultsQuery + "WHERE " + """ AND """.join(queryFields) + """;"""
+        countQuery = countQuery + "WHERE " +" AND ".join(queryFields) + ";"
 
-    return resultsQuery
+    return resultsQuery, countQuery
 
 
 def sqlSearch(formData, full=False):
     startTime = time.time()
     cursor = connection.cursor()
 
-    resultsQuery = queryGeneration(formData)
+    resultsQuery, countQuery = queryGeneration(formData)
     print(resultsQuery)
+
+    cursor.execute(countQuery)
+    countResults = cursor.fetchone()
 
     cursor.execute(resultsQuery)
     startTime = timeit(startTime)
@@ -188,8 +197,9 @@ def sqlSearch(formData, full=False):
     print("Query fetch")
 
     cursor.close()
+    count = countResults['COUNT(LastName)']
 
-    return results
+    return results, count
 
 
 
@@ -206,14 +216,14 @@ def listVoter():
     startTime = time.time()
     formData = request.forms
     if formData.get('type') == 'Export':
-        results = sqlSearch(formData, True)
+        results, count = sqlSearch(formData, True)
         data = []
         headers = ['VoterID', 'LastName', 'Suffix', 'FirstName', 'MiddleName', 'AddressLine1', 'AddressLine2', 'City', 'CountyCode', 'State', 'Zipcode', 'MailingAddressLine1', 
                 'MailingAddressLine2', 'MailingAddressLine3', 'MailingCity', 'MailingState', 'MailingZipcode', 'MailingCountry', 'Gender', 'Race', 'BirthDate', 'RegistrationDate',
                 'PartyAffiliation', 'VoterStatus', 'PhoneAreaCode', 'PhoneNumber', 'PhoneExtension', 'Email']
         data.append('\t'.join(headers))
 
-        if results[0]['COUNT(LastName)'] > 0:
+        if count > 0:
             for row in results:
                 rowData = []
                 for col in headers:
@@ -229,17 +239,15 @@ def listVoter():
 
 
     elif formData.get('type') == 'Lookup':
-        results = sqlSearch(formData)
-
-        if results[0]['COUNT(LastName)'] > 0:
-            count = results[0]['COUNT(LastName)']
+        results, count = sqlSearch(formData)
+        print(results)
+        if count > 0:
             totalTime = "%.5f" % (time.time() - startTime)
             output = template("response.tpl", rows = results, firstName= formData.get('firstName'), lastName=formData.get('lastName'), middleName=formData.get('middleName'),
                 voterID=formData.get('voterID'), zipCode=formData.get('zipCode'), birthMonth=formData.get('birthMonth'), birthYear=formData.get('birthYear'), residenceAddress= formData.get('residenceAddress1'),
                 residenceAddress2= formData.get('residenceAddress2'), city=formData.get('city'), gender=formData.get('gender'), race=formData.get('race'), party=formData.get('party'),
                 phoneNumber=formData.get('phoneNumber'), email=formData.get('email'), regMonth=formData.get('regMonth'), regYear=formData.get('regYear'), count=count, time= totalTime)
         else:
-            count = 0
             output = template("response.tpl", rows = [], firstName= formData.get('firstName'), lastName=formData.get('lastName'), middleName=formData.get('middleName'),
                 voterID=formData.get('voterID'), zipCode=formData.get('zipCode'), birthMonth=formData.get('birthMonth'), birthYear=formData.get('birthYear'), residenceAddress= formData.get('residenceAddress1'),
                 residenceAddress2= formData.get('residenceAddress2'), city=formData.get('city'), gender=formData.get('gender'), race=formData.get('race'), party=formData.get('party'),
