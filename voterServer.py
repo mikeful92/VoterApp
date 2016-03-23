@@ -13,14 +13,16 @@ def dict_factory(cursor, row):
         d[col[0]] = row[idx]
     return d
 
+def timeit(startTime):
+    print("Stage time: {}".format(time.time() - startTime))
+    return time.time()
+
 def sqlSearch(formData, full=False):
     startTime = time.time()
     connection = sqlite3.Connection('../Data/DB.sqlite')
     if not full:
         connection.row_factory = dict_factory
     cursor = connection.cursor()
-    print("DB connection time: {}".format(time.time() - startTime))
-    startTime = time.time()
     error = ""
 
     resultsQuery = ("SELECT FirstName, MiddleName, LastName, " +
@@ -175,26 +177,32 @@ def sqlSearch(formData, full=False):
     if len(queryFields) > 0:        
         resultsQuery = resultsQuery + "WHERE " + """ AND """.join(queryFields) + """;"""
         countQuery = countQuery + "WHERE " +" AND ".join(queryFields) + ";"
-    print("Query creation time: {}".format(time.time() - startTime))
-    startTime = time.time()
+    
+    startTime = timeit(startTime)
+    print("Query creation")
 
     cursor.execute(countQuery)
-    print("Count execute time: {}".format(time.time() - startTime))
-    startTime = time.time()
+    startTime = timeit(startTime)
+    print("Count execution")
+
     count = cursor.fetchone()
-    print("Count fetch time: {}".format(time.time() - startTime))
-    startTime = time.time()
+    startTime = timeit(startTime)
+    print("Count fetch")
+    
 
     print(resultsQuery)
     cursor.execute(resultsQuery)
-    print("Query execute time: {}".format(time.time() - startTime))
-    startTime = time.time()
+    startTime = timeit(startTime)
+    print("Query execute")
+
     if full:
         results = cursor.fetchall()
     else:
         results = cursor.fetchmany(500)
-    print("Query fetch time: {}".format(time.time() - startTime))
-    startTime = time.time()
+
+    startTime = timeit(startTime)
+    print("Query fetch")
+
     cursor.close()
 
     return results, count, error
