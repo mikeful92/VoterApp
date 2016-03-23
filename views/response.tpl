@@ -4,7 +4,11 @@
         <div class="well">
             % if defined('count'):
                 <div class="panel">
-                    <h3>Total results: {{count['COUNT(LastName)']}}</h3>
+                    <h4>Total results: {{count}}
+                    % if defined('time'):
+                        Search Time: {{time}} 
+                    % end
+                    </h4>
                 </div>
             % end
             <table id="results" class="table table-striped display">

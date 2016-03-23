@@ -17,20 +17,8 @@ def timeit(startTime):
     print("Stage time: {}".format(time.time() - startTime))
     return time.time()
 
-def sqlSearch(formData, full=False):
-    startTime = time.time()
-    connection = sqlite3.Connection('../Data/DB.sqlite')
-    if not full:
-        connection.row_factory = dict_factory
-    cursor = connection.cursor()
-    error = ""
-
-    resultsQuery = ("SELECT FirstName, MiddleName, LastName, " +
-                    "AddressLine1, AddressLine2, City, CountyCode, Zipcode, "+
-                    "BirthDate, PartyAffiliation, VoterID " + 
-                    "FROM VOTERS ")
-
-    countQuery = "SELECT COUNT(LastName) FROM VOTERS "
+def queryGeneration(formData):
+    resultsQuery = ("SELECT *, COUNT(LastName) FROM VOTERS ")
 
     voterID = formData.get('voterID')
     firstName = formData.get('firstName')
@@ -176,21 +164,17 @@ def sqlSearch(formData, full=False):
 
     if len(queryFields) > 0:        
         resultsQuery = resultsQuery + "WHERE " + """ AND """.join(queryFields) + """;"""
-        countQuery = countQuery + "WHERE " +" AND ".join(queryFields) + ";"
-    
-    startTime = timeit(startTime)
-    print("Query creation")
 
-    cursor.execute(countQuery)
-    startTime = timeit(startTime)
-    print("Count execution")
+    return resultsQuery
 
-    count = cursor.fetchone()
-    startTime = timeit(startTime)
-    print("Count fetch")
-    
 
+def sqlSearch(formData, full=False):
+    startTime = time.time()
+    cursor = connection.cursor()
+
+    resultsQuery = queryGeneration(formData)
     print(resultsQuery)
+
     cursor.execute(resultsQuery)
     startTime = timeit(startTime)
     print("Query execute")
@@ -205,7 +189,7 @@ def sqlSearch(formData, full=False):
 
     cursor.close()
 
-    return results, count, error
+    return results
 
 
 
@@ -219,15 +203,24 @@ def home():
 
 @post('/listVoter')
 def listVoter():
+    startTime = time.time()
     formData = request.forms
     if formData.get('type') == 'Export':
-        results, count, error = sqlSearch(formData, True)
+        results = sqlSearch(formData, True)
         data = []
-        headers = ['VoterID', 'LastName', 'Suffix', 'FirstName', 'MiddleName', 'AddressLine1', 'AddressLine2', 'City', 'CountyCode', 'State', 'Zipcode', 'MailingAddressLine1', 'MailingAddressLine2', 'MailingAddressLine3', 'MailingCity', 'MailingState', 'MailingZipcode', 'MailingCountry', 'Gender', 'Race', 'BirthDate', 'RegistrationDate', 'PartyAffiliation', 'VoterStatus', 'PhoneAreaCode', 'PhoneNumber', 'PhoneExtension', 'Email']
+        headers = ['VoterID', 'LastName', 'Suffix', 'FirstName', 'MiddleName', 'AddressLine1', 'AddressLine2', 'City', 'CountyCode', 'State', 'Zipcode', 'MailingAddressLine1', 
+                'MailingAddressLine2', 'MailingAddressLine3', 'MailingCity', 'MailingState', 'MailingZipcode', 'MailingCountry', 'Gender', 'Race', 'BirthDate', 'RegistrationDate',
+                'PartyAffiliation', 'VoterStatus', 'PhoneAreaCode', 'PhoneNumber', 'PhoneExtension', 'Email']
         data.append('\t'.join(headers))
 
-        for row in results:
-            data.append('\t'.join(row))
+        if results[0]['COUNT(LastName)'] > 0:
+            for row in results:
+                rowData = []
+                for col in headers:
+                    rowData.append(row[col])
+                data.append('\t'.join(rowData))
+        else:
+            data.append("NO RESULTS FOUND")
 
         output = '\n'.join(data)
 
@@ -236,11 +229,23 @@ def listVoter():
 
 
     elif formData.get('type') == 'Lookup':
-        results, count, error = sqlSearch(formData)
-        if error != '':
-            output = template("response.tpl", rows = results, firstName= formData.get('firstName'), lastName=formData.get('lastName'), middleName=formData.get('middleName'), voterID=formData.get('voterID'), zipCode=formData.get('zipCode'), birthMonth=formData.get('birthMonth'), birthYear=formData.get('birthYear'), residenceAddress= formData.get('residenceAddress1'), residenceAddress2= formData.get('residenceAddress2'),city=formData.get('city'), gender=formData.get('gender'), race=formData.get('race'), party=formData.get('party'),  phoneNumber=formData.get('phoneNumber'), email=formData.get('email'), regMonth=formData.get('regMonth'), regYear=formData.get('regYear'), count=count, error=error)
+        results = sqlSearch(formData)
+
+        if results[0]['COUNT(LastName)'] > 0:
+            count = results[0]['COUNT(LastName)']
+            totalTime = "%.5f" % (time.time() - startTime)
+            output = template("response.tpl", rows = results, firstName= formData.get('firstName'), lastName=formData.get('lastName'), middleName=formData.get('middleName'),
+                voterID=formData.get('voterID'), zipCode=formData.get('zipCode'), birthMonth=formData.get('birthMonth'), birthYear=formData.get('birthYear'), residenceAddress= formData.get('residenceAddress1'),
+                residenceAddress2= formData.get('residenceAddress2'), city=formData.get('city'), gender=formData.get('gender'), race=formData.get('race'), party=formData.get('party'),
+                phoneNumber=formData.get('phoneNumber'), email=formData.get('email'), regMonth=formData.get('regMonth'), regYear=formData.get('regYear'), count=count, time= totalTime)
         else:
-            output = template("response.tpl", rows = results, firstName= formData.get('firstName'), lastName=formData.get('lastName'), middleName=formData.get('middleName'), voterID=formData.get('voterID'), zipCode=formData.get('zipCode'), birthMonth=formData.get('birthMonth'), birthYear=formData.get('birthYear'), residenceAddress= formData.get('residenceAddress1'), residenceAddress2= formData.get('residenceAddress2'), city=formData.get('city'), gender=formData.get('gender'), race=formData.get('race'), party=formData.get('party'), phoneNumber=formData.get('phoneNumber'), email=formData.get('email'), regMonth=formData.get('regMonth'), regYear=formData.get('regYear'), count=count)
+            count = 0
+            output = template("response.tpl", rows = [], firstName= formData.get('firstName'), lastName=formData.get('lastName'), middleName=formData.get('middleName'),
+                voterID=formData.get('voterID'), zipCode=formData.get('zipCode'), birthMonth=formData.get('birthMonth'), birthYear=formData.get('birthYear'), residenceAddress= formData.get('residenceAddress1'),
+                residenceAddress2= formData.get('residenceAddress2'), city=formData.get('city'), gender=formData.get('gender'), race=formData.get('race'), party=formData.get('party'),
+                phoneNumber=formData.get('phoneNumber'), email=formData.get('email'), regMonth=formData.get('regMonth'), regYear=formData.get('regYear'), count=count)
+
+        
     else:
         output = "Error"
     return output
