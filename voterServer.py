@@ -117,7 +117,7 @@ def queryGeneration(formData):
         else:
             month = "_%_%"
         for year in years:
-            yearQuery.append('BirthDate LIKE "' + month + '/_%_%/' + years + '"')
+            yearQuery.append('BirthDate LIKE "' + month + '/_%_%/' + year + '"')
         queryFields.append('(' + ' OR '.join(yearQuery) + ')')
 
     else:
