@@ -240,7 +240,6 @@ def listVoter():
 
     elif formData.get('type') == 'Lookup':
         results, count = sqlSearch(formData)
-        print(results)
         if count > 0:
             totalTime = "%.5f" % (time.time() - startTime)
             output = template("response.tpl", rows = results, firstName= formData.get('firstName'), lastName=formData.get('lastName'), middleName=formData.get('middleName'),
