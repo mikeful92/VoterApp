@@ -215,6 +215,7 @@ def home():
 def listVoter():
     startTime = time.time()
     formData = request.forms
+    print("Received request")
     if formData.get('type') == 'Export':
         results, count = sqlSearch(formData, True)
         data = []
