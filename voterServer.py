@@ -1,30 +1,45 @@
+#
+
 from bottle import route, run, template, post, request, static_file, response
 import sqlite3, json, os, sys, re, time
 
+#Returns a connection to the sqlite DB
+#row_factory is set to dict_factory so that results are returned as a list of dictionaries
+#This makes it easier for the response view to display the results
 def setConnection(databasePath):
     connection = sqlite3.Connection(databasePath)
     connection.row_factory = dict_factory
 
     return connection
 
+#Defines how query results from the DB will be returned as mentioned above
 def dict_factory(cursor, row):
     d = {}
     for idx, col in enumerate(cursor.description):
         d[col[0]] = row[idx]
     return d
 
+#Tracking time of query execution and fetch to better understand indices
 def timeit(startTime):
     print("Stage time: {}".format(time.time() - startTime))
     return time.time()
 
+
+#This function creates the queries, one for results and one for count
+#The function takes the formData as input and captures all the information from the fields
+#If the field was not empty or None it follows an algorithm to create the WHERE statement matching that search
+#Last it joins all the possible WHERE statementes and attaches it to the query Base
 def queryGeneration(formData):
+    #Results query based
     resultsQuery = ("SELECT FirstName, MiddleName, LastName, " +
                     "AddressLine1, AddressLine2, City, CountyCode, Zipcode, "+
                     "BirthDate, PartyAffiliation, VoterID " + 
                     "FROM VOTERS ")
 
+    #Count Query Base
     countQuery = "SELECT COUNT(LastName) FROM VOTERS "
 
+    #Capture form fields
     voterID = formData.get('voterID')
     firstName = formData.get('firstName')
     lastName = formData.get('lastName')
@@ -43,56 +58,76 @@ def queryGeneration(formData):
     party = formData.get('party')
     phoneNumber = formData.get('phoneNumber')
     email = formData.get('email')
+
+    #List of possible WHERE statements
     queryFields = []
 
+    #Perfect match search for voter
     if voterID != "":
         queryFields.append('VoterID = "' + voterID + '"')
 
+
     if firstName != "":
+        #If wildcard(*) is provied alone, search where field is not null
         if firstName == "*":
             queryFields.append('FirstName <> ""')
+        #Else search using LIKE(case-insenstive match)
+        #If user uses wildcard(*) replace for SQL appropriate wildcard character
         else:
             queryFields.append('FirstName LIKE "' + firstName.replace("*", "%") + '"')
 
     if lastName != "":
+        #If wildcard(*) is provied alone, search where field is not null
         if lastName == "*":
             queryFields.append('LastName <> ""')
+        #If user uses wildcard(*) replace for SQL appropriate wildcard character
         else:
             queryFields.append('LastName LIKE "' + lastName.replace("*", "%") + '"')
 
     if middleName != "":
+        #If wildcard(*) is provied alone, search where field is not null
         if middleName == "*":
             queryFields.append('MiddleName <> ""')
+        #If user uses wildcard(*) replace for SQL appropriate wildcard character
         else:
             queryFields.append('MiddleName LIKE "' + middleName.replace("*", "%") + '"')
 
     if address1 != "" and address1 != None:
+        #If wildcard(*) is provied alone, search where field is not null
         if address1 == "*":
             queryFields.append('AddressLine1 <> ""')
+        #If users uses wildcard search with LIKE statement and replace wildcard(*) for SQL appropriate wildcard character(%)
         elif "*" in address1:
             queryFields.append('AddressLine1 LIKE "' + address1.replace("*","%") + '"')
+        #Else split the provided input of address and find fields that contain all the parts in the split address 
         else:
             addressList = address1.split()
             for word in addressList:
                 queryFields.append('instr(AddressLine1, "' + word + '") >0')
 
     if address2 != "" and address2 != None:
+        #If wildcard(*) is provied alone, search where field is not null
         if address2 == "*":
             queryFields.append('AddressLine2 <> ""')
+        #If users uses wildcard search with LIKE statement and replace wildcard(*) for SQL appropriate wildcard character(%)
         elif "*" in address2:
             queryFields.append('AddressLine2 LIKE "' + address2.replace("*","%") + '"')
+        #Else split the provided input of address and find fields that contain all the parts in the split address 
         else:
             addressList = address2.split()
             for word in addressList:
                 queryFields.append('instr(AddressLine2, "' + word + '") >0')
 
     if city != "":
+        #If wildcard(*) is provied alone, search where field is not null
         if city == "*":
             queryFields.append('City <> ""')
+        #If user uses wildcard(*) replace for SQL appropriate wildcard character
         else:
             queryFields.append('City LIKE "' + city.replace("*", "%") + '"')
 
 
+    #Perfect match search for County Code
     if countyCode != "":
         queryFields.append('CountyCode = "' + countyCode + '"')
 
@@ -176,6 +211,7 @@ def queryGeneration(formData):
 
 def sqlSearch(formData, full=False):
     startTime = time.time()
+    connection = setConnection('../Data/DB.sqlite')
     cursor = connection.cursor()
 
     resultsQuery, countQuery = queryGeneration(formData)
@@ -262,6 +298,7 @@ def listVoter():
 
 @route('/voter/<voterID>')
 def listVoter(voterID):
+    connection = setConnection('../Data/DB.sqlite')
     cursor = connection.cursor()
 
     query = """SELECT * FROM VOTERS WHERE VoterID = ?"""
@@ -277,6 +314,7 @@ def listVoter(voterID):
 
 @route('/address/<address>')
 def listAddress(address):
+    connection = setConnection('../Data/DB.sqlite')
     cursor = connection.cursor()
     resultsQuery = ("SELECT FirstName, MiddleName, LastName, Suffix, " +
             "AddressLine1, AddressLine2, City, CountyCode, Zipcode, "+
@@ -303,6 +341,7 @@ def send_static(directory, filename):
 
 @route('/api/v1/voter/<voterID>')
 def voterShow(voterID):
+    connection = setConnection('../Data/DB.sqlite')
     cursor = connection.cursor()
     query = "SELECT * FROM VOTERS WHERE VoterID = ?;"
 
@@ -317,8 +356,7 @@ def voterShow(voterID):
     else:
         return jsonResponse
 
-global connection
-connection = setConnection('../Data/DB.sqlite')
+
 args = sys.argv
 if len(args) == 2:
     port = int(os.path.join(args[1]))
