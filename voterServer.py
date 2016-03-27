@@ -233,6 +233,7 @@ def sqlSearch(formData, full=False):
     print("Query fetch")
 
     cursor.close()
+    connection.close()
     count = countResults['COUNT(LastName)']
 
     return results, count
@@ -305,6 +306,7 @@ def listVoter(voterID):
     cursor.execute(query, [str(voterID)])
     results = cursor.fetchone()
     cursor.close()
+    connection.close()
 
     if len(results) == 0:
         output = template("index.tpl")
@@ -328,6 +330,9 @@ def listAddress(address):
     cursor.execute(resultsQuery, [address])
     results = cursor.fetchmany(25)
 
+    cursor.close()
+    connection.close()
+    
     if len(results) == 0:
         output = template("index.tpl")
     else:
@@ -349,6 +354,8 @@ def voterShow(voterID):
 
     data = cursor.fetchone()
     cursor.close()
+    connection.close()
+
     jsonResponse = json.dumps(data)
 
     if len(data) == 0:
