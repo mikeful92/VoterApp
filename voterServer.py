@@ -291,8 +291,8 @@ def saveSearch(formData):
     phoneNumber = formData.get('phoneNumber')
     email = formData.get('email')
 
-    cursor.execute('INSERT INTO SEARCHES(SearchName, VoterID, LastName, Suffix, FirstName, AddressLine1, AddressLine2, City, CountyCode, ZipCode, Gender, Race, BirthDate, RegistrationDate, PartyAffiliation, PhoneNumber, Email)'+
-                    ' VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);', [searchName, voterID, firstName, lastName, middleName, address1, address2, city, countyCode, zipCode, birthMonth, birthYear, regMonth, regYear, gender, race, party, phoneNumber, email])
+    cursor.execute('INSERT INTO SEARCHES(SearchName, VoterID, LastName, Suffix, FirstName, AddressLine1, AddressLine2, City, CountyCode, ZipCode, Gender, Race, BirthMonth, BirthYear, RegMonth, RegYear, PartyAffiliation, PhoneNumber, Email)'+
+                    ' VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);', [searchName, voterID, lastName, middleName, firstName, address1, address2, city, countyCode, zipCode, gender, race, , birthMonth, birthYear, regMonth, regYear, party, phoneNumber, email])
     cursor.close()
     connection.close()
 
@@ -390,7 +390,7 @@ def listAddress(address):
     print(resultsQuery)
     cursor.execute(resultsQuery, [address])
     results = cursor.fetchmany(25)
-
+    #TODO fix count results and over all results returned
     cursor.close()
     connection.close()
     
