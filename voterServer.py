@@ -33,11 +33,11 @@ def queryGeneration(formData):
     #Results query based
     resultsQuery = ("SELECT FirstName, MiddleName, LastName, " +
                     "AddressLine1, AddressLine2, City, CountyCode, Zipcode, "+
-                    "BirthDate, PartyAffiliation, VoterID " + 
-                    "FROM VOTERS ")
+                    "BirthDate, PartyAffiliation, VoterID ")
+    table = "VOTERS"
 
     #Count Query Base
-    countQuery = "SELECT COUNT(LastName) FROM VOTERS "
+    countQuery = "SELECT COUNT(LastName)"
 
     #Capture form fields
     voterID = formData.get('voterID')
@@ -129,22 +129,33 @@ def queryGeneration(formData):
 
     #Perfect match search for County Code
     if countyCode != "":
-        queryFields.append('CountyCode = "' + countyCode + '"')
+        if countyCode == "PAL":
+            table = "PALMVOTERS"
+        else:
+            queryFields.append('CountyCode = "' + countyCode + '"')
+
 
     if zipCode != "":
+        #If wildcard(*) is provied alone, search where field is not null
         if zipCode == "*":
                 queryFields.append('ZipCode <> ""')
         else:
+            #User can submit more than one zip code at time, separated by a comma(,)
             zipCodes = zipCode.replace(' ', '').split(",")
+            #If only one zipcode was provided, replace for SQL appropriate wildcard character
             if len(zipCodes) == 1:
                 queryFields.append('ZipCode LIKE "' + zipCode.replace("*", "%") + '"')
             else:
+                #If more than one zipcode is provided then add each zipcode condition individually
                 zipQuery = []
                 for code in zipCodes:
                     zipQuery.append('ZipCode LIKE "' + code.replace("*", "%") + '"')
+                #Join all the conditions using an 'OR' and append to query Fields. 
                 queryFields.append('(' + ' OR '.join(zipQuery) + ')')
 
+    #User can submit more than one zip code at time, separated by a comma(,)
     if "," in birthYear:
+        #split by comma, and replace for SQL appropriate wildcard character
         years = birthYear.replace("*","%").split(',')
         yearQuery = []
         if birthMonth != "":
@@ -163,48 +174,60 @@ def queryGeneration(formData):
         elif birthMonth != "" and birthYear == "":
             queryFields.append('BirthDate LIKE "' + birthMonth + '/_%_%/_%_%_%_%"')
 
+
+    #Condition if both Registration Month and Registration Year are provided
     if regMonth != "" and regYear != "":
         queryFields.append('RegistrationDate Like "' + regMonth + '/_%_%/' + regYear +'"')
+    #Condition if only Registration Year is provided
     elif regMonth == "" and regYear != "":
         queryFields.append('RegistrationDate LIKE "_%_%/_%_%/' + regYear + '"')
+    #Condition if only Registration Month is provided
     elif regMonth != "" and regYear == "":
         queryFields.append('RegistrationDate LIKE "' + regMonth + '/_%_%/_%_%_%_%"')
 
-
+    #Condition if gender is not empty
     if gender != "" and gender != None:
         queryFields.append('Gender = "' + gender + '"')
 
+    #Condition if gender is not empty
     if race != "" and race != None:
         queryFields.append('Race = "' + race + '"')
 
+    #Condition if gender is not empty
     if party != "" and party != None:
             queryFields.append('PartyAffiliation = "' + party + '"')
 
 
     if phoneNumber != "":
+        #If wildcard(*) is provied alone, search where field is not null
         if phoneNumber == "*":
             queryFields.append('PhoneNumber <> ""')
         else:
+            #Reg Ex search for numbers only in the phon number field
             numeric = re.compile(r'[^\d*]+')
             cleanNumber = numeric.sub('',phoneNumber)
+            #if only 7 digits were provided, search only the Phone Number field
             if len(cleanNumber) == 7:
                 queryFields.append('PhoneNumber LIKE "' + cleanNumber + '"')
+            #If 10 digits were provided, search first 3 digits in Phone Area Code field, last 7 digits in Phone Number field 
             elif len(cleanNumber) == 10:
                 queryFields.append('PhoneAreaCode LIKE "' + cleanNumber[:3] + '"')
                 queryFields.append('PhoneNumber LIKE "' + cleanNumber[3:] + '"')
 
 
     if email != "":
+        #If wildcard(*) is provied alone, search where field is not null
         if email == "*":
             queryFields.append('Email <> ""')
+        #If user uses wildcard(*) replace for SQL appropriate wildcard character
         else:
             queryFields.append('Email LIKE "' + email.replace("*","%") + '"')
 
 
-
+    #If at least one field was not null, then add the the query as WHERE using join
     if len(queryFields) > 0:        
-        resultsQuery = resultsQuery + "WHERE " + """ AND """.join(queryFields) + """;"""
-        countQuery = countQuery + "WHERE " +" AND ".join(queryFields) + ";"
+        resultsQuery = resultsQuery + " FROM " + table + " WHERE " + """ AND """.join(queryFields) + """;"""
+        countQuery = countQuery + " FROM " + table + " WHERE " +" AND ".join(queryFields) + ";"
 
     return resultsQuery, countQuery
 
@@ -215,6 +238,7 @@ def sqlSearch(formData, full=False):
     cursor = connection.cursor()
 
     resultsQuery, countQuery = queryGeneration(formData)
+    print(countQuery)
     print(resultsQuery)
 
     cursor.execute(countQuery)
@@ -362,6 +386,13 @@ def voterShow(voterID):
         return { "success" : False, "error" : "None or more than one voter returned" }
     else:
         return jsonResponse
+
+@route('/searches')
+def listSearches():
+    
+
+    return template("searches.tpl", searches=results)
+
 
 
 args = sys.argv
