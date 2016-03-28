@@ -266,7 +266,35 @@ def sqlSearch(formData, full=False):
 
     return results, count
 
+def saveSearch(formData):
+    connection = setConnection('../Data/DB.sqlite')
+    cursor = connection.cursor()
 
+    #Capture form fields
+    searchName = formData.get('searchName')
+    voterID = formData.get('voterID')
+    firstName = formData.get('firstName')
+    lastName = formData.get('lastName')
+    middleName = formData.get('middleName')
+    address1 = formData.get('residenceAddress1').upper()
+    address2 = formData.get('residenceAddress2').upper()
+    city = formData.get('city').upper()
+    countyCode = formData.get('countyCode')
+    zipCode = formData.get('zipCode')
+    birthMonth = formData.get('birthMonth')
+    birthYear = formData.get('birthYear')
+    regMonth = formData.get('regMonth')
+    regYear = formData.get('regYear')
+    gender = formData.get('gender')
+    race = formData.get('race')
+    party = formData.get('party')
+    phoneNumber = formData.get('phoneNumber')
+    email = formData.get('email')
+
+    cursor.execute('INSERT INTO SEARCHES(SearchName, VoterID, LastName, Suffix, FirstName, AddressLine1, AddressLine2, City, CountyCode, ZipCode, Gender, Race, BirthDate, RegistrationDate, PartyAffiliation, PhoneNumber, Email)'+
+                    ' VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);', [searchName, voterID, firstName, lastName, middleName, address1, address2, city, countyCode, zipCode, birthMonth, birthYear, regMonth, regYear, gender, race, party, phoneNumber, email])
+    cursor.close()
+    connection.close()
 
 @route('/')
 @route('/voterapp')
@@ -318,9 +346,14 @@ def listVoter():
                 residenceAddress2= formData.get('residenceAddress2'), city=formData.get('city'), gender=formData.get('gender'), race=formData.get('race'), party=formData.get('party'),
                 phoneNumber=formData.get('phoneNumber'), email=formData.get('email'), regMonth=formData.get('regMonth'), regYear=formData.get('regYear'), count=count)
 
-        
+    elif formData.get('type') == 'SaveSearch':
+        saveSearch(formData)
+
+        output = template("searches.tpl")
+
     else:
         output = "Error"
+
     return output
 
 
@@ -348,7 +381,7 @@ def listAddress(address):
     cursor = connection.cursor()
     resultsQuery = ("SELECT FirstName, MiddleName, LastName, Suffix, " +
             "AddressLine1, AddressLine2, City, CountyCode, Zipcode, "+
-            "VoterID, BirthDate, PartyAffiliation " + 
+            "VoterID, BirthDate, PartyAffiliation, RegistrationDate " + 
             "FROM VOTERS " +
             "WHERE AddressLine1 = ?")
     countQuery = "SELECT COUNT(LastName) FROM VOTERS WHERE AddressLine1 = ?"

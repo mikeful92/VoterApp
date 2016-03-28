@@ -526,6 +526,8 @@
                 <div class="col-lg-1">
                     <button class="btn btn-primary btn-block" type="submit" name="type" value="Lookup">Lookup</button>
                     <button class="btn btn-primary btn-block" type="submit" name="type" value="Export">Export</button>
+                    <button class="btn btn-primary btn-block" type="submit" name="type" value="SaveSearch">Save</button>
+                    <input type="text" class="form-control input" name="searchName" placeholder="Search Name">
                 </div>
             </div>
             </form>
