@@ -29,11 +29,8 @@ def timeit(startTime):
 #The function takes the formData as input and captures all the information from the fields
 #If the field was not empty or None it follows an algorithm to create the WHERE statement matching that search
 #Last it joins all the possible WHERE statementes and attaches it to the query Base
-def queryGeneration(formData):
-    #Results query based
-    resultsQuery = ("SELECT FirstName, MiddleName, LastName, " +
-                    "AddressLine1, AddressLine2, City, CountyCode, Zipcode, "+
-                    "BirthDate, PartyAffiliation, VoterID ")
+def queryGeneration(formData, baseQuery):
+    #    
     table = "VOTERS"
 
     #Count Query Base
@@ -226,7 +223,7 @@ def queryGeneration(formData):
 
     #If at least one field was not null, then add the the query as WHERE using join
     if len(queryFields) > 0:        
-        resultsQuery = resultsQuery + " FROM " + table + " WHERE " + """ AND """.join(queryFields) + """;"""
+        resultsQuery = baseQuery + " FROM " + table + " WHERE " + """ AND """.join(queryFields) + """;"""
         countQuery = countQuery + " FROM " + table + " WHERE " +" AND ".join(queryFields) + ";"
 
     return resultsQuery, countQuery
@@ -237,7 +234,14 @@ def sqlSearch(formData, full=False):
     connection = setConnection('../Data/DB.sqlite')
     cursor = connection.cursor()
 
-    resultsQuery, countQuery = queryGeneration(formData)
+    if not full:
+        baseQuery = ("SELECT FirstName, MiddleName, LastName, " +
+                    "AddressLine1, AddressLine2, City, CountyCode, Zipcode, "+
+                    "BirthDate, PartyAffiliation, VoterID ")
+    else:
+        baseQuery = "SELECT * "
+
+    resultsQuery, countQuery = queryGeneration(formData, baseQuery)
     print(countQuery)
     print(resultsQuery)
 
@@ -251,7 +255,7 @@ def sqlSearch(formData, full=False):
     if full:
         results = cursor.fetchall()
     else:
-        results = cursor.fetchmany(500)
+        results = cursor.fetchmany(15000)
 
     startTime = timeit(startTime)
     print("Query fetch")

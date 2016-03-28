@@ -29,7 +29,7 @@
             <div class="container">
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li><a class="navbar-brand" href="/">Florida Voter Search - v11 - Statewide - March 2016 extract</a></li>
+                        <li><a class="navbar-brand" href="/">Florida Voter Search - v12 - Statewide - March 2016 extract</a></li>
                     </ul>
                 </div>
             </div>
