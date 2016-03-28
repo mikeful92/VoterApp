@@ -1,7 +1,7 @@
 % include('header.tpl')
 % include('searchBox.tpl')
 <div class="row">
-    <div class="col-lg-10 col-lg-offset-1">
+    <div class="col-lg-12">
         <div class="well">
             % if defined('count'):
                 <div class="panel">
@@ -27,10 +27,11 @@
                         <th>Address Line 1</th>
                         <th>Line 2</th>
                         <th>City</th>
-                        <th>County</th>
-                        <th>Zip Code</th>
-                        <th>Date of Birth</th>
+                        <th>Cty.</th>
+                        <th>ZipCode</th>
+                        <th>D.O.B.</th>
                         <th>Party</th>
+                        <th>Reg. Date</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -47,6 +48,7 @@
                             <td>{{row['Zipcode']}}</td>
                             <td>{{row['BirthDate']}}</td>
                             <td>{{row['PartyAffiliation']}}</td>
+                            <td>{{row['RegistrationDate']}}</td>
                             <td>
                                 <form action="/voter/{{row['VoterID']}}" METHOD="GET"  style="margin-bottom: 0;">
                                     <button class="btn btn-primary btn-xs" type="submit">Full Record</button>

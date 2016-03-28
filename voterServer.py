@@ -237,7 +237,7 @@ def sqlSearch(formData, full=False):
     if not full:
         baseQuery = ("SELECT FirstName, MiddleName, LastName, " +
                     "AddressLine1, AddressLine2, City, CountyCode, Zipcode, "+
-                    "BirthDate, PartyAffiliation, VoterID ")
+                    "BirthDate, PartyAffiliation, RegistrationDate, VoterID ")
     else:
         baseQuery = "SELECT * "
 
