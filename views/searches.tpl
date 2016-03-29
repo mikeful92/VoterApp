@@ -89,9 +89,9 @@
 
                     </td>
                     <td>
-                        <form action="/searches" METHOD="POST" enctype = "multipart/form-data">
+                        <form action="/searches" METHOD="POST" enctype = "multipart/form-data" onsubmit="return confirm('Do you really want to delete that search?');">
                             <input type="hidden" name="SearchID" value="{{ search['ID'] }}">
-                            <button class="btn btn-primary btn-block" type="submit">DELETE</button>
+                            <button class="btn btn-danger btn-block" type="submit">DELETE</button>
                         </form>
                     </td>
                 </tr>
