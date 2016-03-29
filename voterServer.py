@@ -1,4 +1,4 @@
-from bottle import route, run, template, post, request, static_file, response, get, post, redirect
+from bottle import route, run, template, request, static_file, response, get, post, redirect
 import sqlite3, json, os, sys, re, time
 
 #Returns a connection to the sqlite DB
@@ -231,31 +231,42 @@ def queryGeneration(formData, baseQuery):
 
 
 def sqlSearch(formData, full=False):
+    #Start timer for performance tracking
     startTime = time.time()
+    #Create connectiont to DB and assign cursor
     connection = setConnection('../Data/DB.sqlite')
     cursor = connection.cursor()
 
+    #Search parameters are different for a full search (export) and non-full search(list voters)
     if not full:
+        #Only pulling the columns needed when pulling for list voters
         baseQuery = ("SELECT FirstName, MiddleName, LastName, " +
                     "AddressLine1, AddressLine2, City, CountyCode, Zipcode, "+
                     "BirthDate, PartyAffiliation, RegistrationDate, VoterID ")
     else:
+        #pull all the data when exporting
         baseQuery = "SELECT * "
 
+    #Generate the results and count query conditions
     resultsQuery, countQuery = queryGeneration(formData, baseQuery)
     print(countQuery)
     print(resultsQuery)
 
+    #Execute the count first and fetch results
     cursor.execute(countQuery)
     countResults = cursor.fetchone()
 
+    #Second execute the results and time it
     cursor.execute(resultsQuery)
     startTime = timeit(startTime)
     print("Query execute")
 
     if full:
+        #Fetch all results if full search (exporting)
         results = cursor.fetchall()
     else:
+        #Fetch 15000 records if not full (list voters)
+        #More than 15,000 will cause a bottle neck in the browser displayng >15000 rows
         results = cursor.fetchmany(15000)
 
     startTime = timeit(startTime)
@@ -270,6 +281,12 @@ def sqlSearch(formData, full=False):
 def saveSearch(formData):
     connection = setConnection('../Data/DB.sqlite')
     cursor = connection.cursor()
+
+    resultsQuery, countQuery = queryGeneration(formData, "SELECT *")
+
+    cursor.execute(countQuery)
+    countResults = cursor.fetchone()
+    count = countResults['COUNT(LastName)']
 
     #Capture form fields
     searchName = formData.get('searchName')
@@ -292,13 +309,12 @@ def saveSearch(formData):
     phoneNumber = formData.get('phoneNumber')
     email = formData.get('email')
 
-    print('Fields')
-    cursor.execute('INSERT INTO SEARCHES(SearchName, VoterID, LastName, FirstName, MiddleName, AddressLine1, AddressLine2, City, CountyCode, ZipCode, Gender, Race, BirthMonth, BirthYear, RegMonth, RegYear, PartyAffiliation, PhoneNumber, Email)'+
-                    ' VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);', [searchName, voterID, lastName, firstName, middleName, address1, address2, city, countyCode, zipCode, gender, race, birthMonth, birthYear, regMonth, regYear, party, phoneNumber, email])
+    cursor.execute('INSERT INTO SEARCHES(SearchName, Count, LastName, FirstName, MiddleName, AddressLine1, AddressLine2, City, CountyCode, ZipCode, Gender, Race, BirthMonth, BirthYear, RegMonth, RegYear, PartyAffiliation, PhoneNumber, Email)'+
+                    ' VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);', [searchName, count, lastName, firstName, middleName, address1, address2, city, countyCode, zipCode, gender, race, birthMonth, birthYear, regMonth, regYear, party, phoneNumber, email])
     cursor.close()
     connection.commit()
     connection.close()
-    print('Inserted')
+
 
 def selectSearches():
     connection = setConnection('../Data/DB.sqlite')
@@ -319,8 +335,6 @@ def home():
 def listVoter():
     startTime = time.time()
     formData = request.forms
-    print(formData.get('MiddleName'))
-    print(formData.get('City'))
     print("Received request")
     if formData.get('type') == 'Export':
         results, count = sqlSearch(formData, True)
@@ -360,7 +374,9 @@ def listVoter():
                 phoneNumber=formData.get('phoneNumber'), email=formData.get('email'), regMonth=formData.get('regMonth'), regYear=formData.get('regYear'), count=count)
 
     elif formData.get('type') == 'SaveSearch':
+        
         saveSearch(formData)
+
         return redirect('/searches')
 
     else:

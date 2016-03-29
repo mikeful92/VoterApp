@@ -1,9 +1,10 @@
 % include('header.tpl')
 <div class="well">
-   <table class="table">
+   <table class="table table-striped display" id="searches">
         <thead>
             <tr>
                 <th>Search Name</th>
+                <th>Count</th>
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Middle Name</th>
@@ -22,49 +23,71 @@
                 <th>Phone Number</th>
                 <th>Email</th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             %for search in searches:
-            <form class="form" action="/listVoter" METHOD="POST" enctype = "multipart/form-data">
                 <tr>
                     <td>{{search['SearchName']}}</td>
+                    <td>{{search['Count']}}</td>
                     <td>{{search['FirstName']}}</td>
-                    <input type="hidden" name="firstName" value="{{ search['FirstName'] }}">
                     <td>{{search['LastName']}}</td>
-                    <input type="hidden" name="lastName" value="{{ search['LastName'] }}">
+                    
                     <td>{{search['MiddleName']}}</td>
-                    <input type="hidden" name="middleName" value="{{ search['MiddleName'] }}">
+                    
                     <td>{{search['AddressLine1']}}</td>
-                    <input type="hidden" name="residenceAddress1" value="{{search['AddressLine1']}}">
+                    
                     <td>{{search['AddressLine2']}}</td>
-                    <input type="hidden" name="residenceAddress2" value="{{search['AddressLine2']}}">
+                    
                     <td>{{search['City']}}</td>
-                    <input type="hidden" name="city" value="{{ search['City'] }}">
+                   
                     <td>{{search['CountyCode']}}</td>
-                    <input type="hidden" name="countyCode" value="{{ search['CountyCode'] }}">
+                    
                     <td>{{search['Zipcode']}}</td>
-                    <input type="hidden" name="zipCode" value="{{ search['Zipcode'] }}">
+                    
                     <td>{{search['BirthMonth']}}</td>
-                    <input type="hidden" name="birthMonth" value="{{ search['BirthMonth'] }}">
+                    
                     <td>{{search['BirthYear']}}</td>
-                    <input type="hidden" name="birthYear" value="{{ search['BirthYear'] }}">
+                    
                     <td>{{search['RegMonth']}}</td>
-                    <input type="hidden" name="regMonth" value="{{ search['RegMonth'] }}">
+                    
                     <td>{{search['RegYear']}}</td>
-                    <input type="hidden" name="regYear" value="{{ search['RegYear'] }}">
+                    
                     <td>{{search['Gender']}}</td>
-                    <input type="hidden" name="gender" value="{{ search['Gender'] }}">
+                    
                     <td>{{search['Race']}}</td>
-                    <input type="hidden" name="race" value="{{ search['Race'] }}">
+                    
                     <td>{{search['PartyAffiliation']}}</td>
-                    <input type="hidden" name="party" value="{{ search['PartyAffiliation'] }}">
+                    
                     <td>{{search['PhoneNumber']}}</td>
-                    <input type="hidden" name="phoneNumber" value="{{ search['PhoneNumber'] }}">
+                    
                     <td>{{search['Email']}}</td>
-                    <input type="hidden" name="email" value="{{ search['Email'] }}">
+                    
 
-                    <td><button class="btn btn-primary btn-block" type="submit" name="type" value="Lookup">Lookup</button></form></td>
+                    <td>
+                        <form class="form" action="/listVoter" METHOD="POST" enctype = "multipart/form-data">
+                            <input type="hidden" name="firstName" value="{{ search['FirstName'] }}">
+                            <input type="hidden" name="lastName" value="{{ search['LastName'] }}">
+                            <input type="hidden" name="middleName" value="{{ search['MiddleName'] }}">
+                            <input type="hidden" name="residenceAddress1" value="{{search['AddressLine1']}}">
+                            <input type="hidden" name="residenceAddress2" value="{{search['AddressLine2']}}">
+                            <input type="hidden" name="city" value="{{ search['City'] }}">
+                            <input type="hidden" name="countyCode" value="{{ search['CountyCode'] }}">
+                            <input type="hidden" name="zipCode" value="{{ search['Zipcode'] }}">
+                            <input type="hidden" name="birthMonth" value="{{ search['BirthMonth'] }}">
+                            <input type="hidden" name="birthYear" value="{{ search['BirthYear'] }}">
+                            <input type="hidden" name="regMonth" value="{{ search['RegMonth'] }}">
+                            <input type="hidden" name="regYear" value="{{ search['RegYear'] }}">
+                            <input type="hidden" name="gender" value="{{ search['Gender'] }}">
+                            <input type="hidden" name="race" value="{{ search['Race'] }}">
+                            <input type="hidden" name="party" value="{{ search['PartyAffiliation'] }}">
+                            <input type="hidden" name="phoneNumber" value="{{ search['PhoneNumber'] }}">
+                            <input type="hidden" name="email" value="{{ search['Email'] }}">
+                            <button class="btn btn-primary btn-block" type="submit" name="type" value="Lookup">Lookup</button>
+                        </form>
+
+                    </td>
                     <td>
                         <form action="/searches" METHOD="POST" enctype = "multipart/form-data">
                             <input type="hidden" name="SearchID" value="{{ search['ID'] }}">

@@ -13,6 +13,9 @@
                 "sSearch": "Search results:"
                 }
             });
+            $("#searches").DataTable({
+                "dom": 'frtip',
+            });
         } );
     </script>
 </html>

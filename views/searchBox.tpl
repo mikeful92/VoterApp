@@ -36,18 +36,6 @@
                     <div class="form-group">
                         <input type="text"  class="form-control input" name="middleName" placeholder="Middle Name" value="{{ get('middleName','') }}">
                     </div>
-                </div>
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <input type="text"
-                        class="form-control input masterTooltip" name="residenceAddress1" placeholder="Residence Address" value="{{ get('residenceAddress','') }}">
-                    </div>
-                    <div class="form-group">
-                        <input type="text"  class="form-control input" name="residenceAddress2" placeholder="Residence Address 2" value="{{ get('residenceAddress2','') }}" >
-                    </div>
-                    <div class="form-group">
-                        <input type="text"  class="form-control input" name="city" placeholder="City" value="{{ get('city','') }}">
-                    </div>
                     <div class="form-group">
                         <select class="form-control input" name="countyCode" >
                             <option value='PAL' selected>Palm Beach</option>
@@ -123,6 +111,18 @@
                             <option value='WAL'>Walton</option>
                             <option value='WAS'>Washington</option>
                         </select>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <input type="text"
+                        class="form-control input masterTooltip" name="residenceAddress1" placeholder="Residence Address" value="{{ get('residenceAddress','') }}">
+                    </div>
+                    <div class="form-group">
+                        <input type="text"  class="form-control input" name="residenceAddress2" placeholder="Residence Address 2" value="{{ get('residenceAddress2','') }}" >
+                    </div>
+                    <div class="form-group">
+                        <input type="text"  class="form-control input" name="city" placeholder="City" value="{{ get('city','') }}">
                     </div>
                     <div class="form-group">
                         <input type="text" class="form-control input" name="zipCode" placeholder="ZipCode" value="{{ get('zipCode','') }}">
@@ -524,10 +524,18 @@
                     </div>
                 </div>
                 <div class="col-lg-1">
-                    <button class="btn btn-primary btn-block" type="submit" name="type" value="Lookup">Lookup</button>
-                    <button class="btn btn-primary btn-block" type="submit" name="type" value="Export">Export</button>
-                    <button class="btn btn-primary btn-block" type="submit" name="type" value="SaveSearch">Save</button>
-                    <input type="text" class="form-control input" name="searchName" placeholder="Search Name">
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-block" type="submit" name="type" value="Lookup">Lookup</button>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-block" type="submit" name="type" value="Export">Export</button>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control input" name="searchName" placeholder="Search Name">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-block" type="submit" name="type" value="SaveSearch">Save</button>
+                    </div>                    
                 </div>
             </div>
             </form>
