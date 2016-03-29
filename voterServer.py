@@ -39,9 +39,9 @@ def queryGeneration(formData, baseQuery):
     firstName = formData.get('firstName')
     lastName = formData.get('lastName')
     middleName = formData.get('middleName')
-    address1 = formData.get('residenceAddress1').upper()
-    address2 = formData.get('residenceAddress2').upper()
-    city = formData.get('city').upper()
+    address1 = formData.get('residenceAddress1')
+    address2 = formData.get('residenceAddress2')
+    city = formData.get('city')
     countyCode = formData.get('countyCode')
     zipCode = formData.get('zipCode')
     birthMonth = formData.get('birthMonth')
@@ -58,7 +58,7 @@ def queryGeneration(formData, baseQuery):
     queryFields = []
 
     #Perfect match search for voter
-    if voterID != "":
+    if voterID != "" and voterID != None:
         queryFields.append('VoterID = "' + voterID + '"')
 
 
@@ -88,6 +88,7 @@ def queryGeneration(formData, baseQuery):
             queryFields.append('MiddleName LIKE "' + middleName.replace("*", "%") + '"')
 
     if address1 != "" and address1 != None:
+        address1 = address1.upper()
         #If wildcard(*) is provied alone, search where field is not null
         if address1 == "*":
             queryFields.append('AddressLine1 <> ""')
@@ -101,6 +102,7 @@ def queryGeneration(formData, baseQuery):
                 queryFields.append('instr(AddressLine1, "' + word + '") >0')
 
     if address2 != "" and address2 != None:
+        address2 = address2.upper()
         #If wildcard(*) is provied alone, search where field is not null
         if address2 == "*":
             queryFields.append('AddressLine2 <> ""')
@@ -113,7 +115,8 @@ def queryGeneration(formData, baseQuery):
             for word in addressList:
                 queryFields.append('instr(AddressLine2, "' + word + '") >0')
 
-    if city != "":
+    if city != "" and city != None:
+        city = city.upper()
         #If wildcard(*) is provied alone, search where field is not null
         if city == "*":
             queryFields.append('City <> ""')
@@ -440,14 +443,7 @@ def listSearches():
 
     return output
 
-@get('/searches2')
-def listSearches2():
-    results = selectSearches()
-    output = template("searches2.tpl", searches=results)
-
-    return output
-
-@post('/searches2')
+@post('/searches')
 def deleteSearch():
     searchID = request.forms.get('SearchID')
     connection = setConnection('../Data/DB.sqlite')
@@ -459,7 +455,7 @@ def deleteSearch():
     connection.close()
 
 
-    return redirect('/searches2')
+    return redirect('/searches')
 
 args = sys.argv
 if len(args) == 2:
