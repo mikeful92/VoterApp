@@ -34,12 +34,12 @@
                         <input type="text" class="form-control input" name="lastName" placeholder="Last Name" value="{{ get('lastName','') }}">
                     </div>
                     <div class="form-group">
-                        <input type="text"  class="form-control input"name="middleName" placeholder="Middle Name" value="{{ get('middleName','') }}">
+                        <input type="text"  class="form-control input" name="middleName" placeholder="Middle Name" value="{{ get('middleName','') }}">
                     </div>
                 </div>
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <input type="text"  title="Single wildcard(*) for non-empty searches. Multi wildcard (*) can be used"
+                        <input type="text"
                         class="form-control input masterTooltip" name="residenceAddress1" placeholder="Residence Address" value="{{ get('residenceAddress','') }}">
                     </div>
                     <div class="form-group">
@@ -299,7 +299,7 @@
                         <select class="form-control input" name="party">
                             %if defined('party'):
                                 % if party == "":
-                                    <option value="" selected>Any Pary</option>
+                                    <option value="" selected>Any Party</option>
                                     <option value="DEM">Florida Democratic Party</option>
                                     <option value="NPA">No Party Affiliation</option>
                                     <option value="REP">Republican Party of Florida</option>
@@ -314,7 +314,7 @@
                                     <option value="REF">Reform Party</option>                                            
                                 %end
                                 % if party == 'DEM':
-                                    <option value="">Any Pary</option>
+                                    <option value="">Any Party</option>
                                     <option value="DEM" selected>Florida Democratic Party</option>
                                     <option value="NPA">No Party Affiliation</option>
                                     <option value="REP">Republican Party of Florida</option>
@@ -329,7 +329,7 @@
                                     <option value="REF">Reform Party</option> 
                                 %end
                                 % if party == 'NPA':
-                                    <option value="">Any Pary</option>
+                                    <option value="">Any Party</option>
                                     <option value="DEM">Florida Democratic Party</option>
                                     <option value="NPA" selected>No Party Affiliation</option>
                                     <option value="REP">Republican Party of Florida</option>
@@ -344,7 +344,7 @@
                                     <option value="REF">Reform Party</option> 
                                 %end
                                 % if party == 'REP':
-                                    <option value="">Any Pary</option>
+                                    <option value="">Any Party</option>
                                     <option value="DEM">Florida Democratic Party</option>
                                     <option value="NPA">No Party Affiliation</option>
                                     <option value="REP" selected>Republican Party of Florida</option>
@@ -359,7 +359,7 @@
                                     <option value="REF">Reform Party</option> 
                                 %end
                                 % if party == 'AIP':
-                                    <option value="">Any Pary</option>
+                                    <option value="">Any Party</option>
                                     <option value="DEM">Florida Democratic Party</option>
                                     <option value="NPA">No Party Affiliation</option>
                                     <option value="REP">Republican Party of Florida</option>
@@ -374,7 +374,7 @@
                                     <option value="REF">Reform Party</option> 
                                 %end
                                 % if party == 'CPF':
-                                    <option value="">Any Pary</option>
+                                    <option value="">Any Party</option>
                                     <option value="DEM">Florida Democratic Party</option>
                                     <option value="NPA">No Party Affiliation</option>
                                     <option value="REP">Republican Party of Florida</option>
@@ -389,7 +389,7 @@
                                     <option value="REF">Reform Party</option> 
                                 %end
                                 % if party == 'ECO':
-                                    <option value="">Any Pary</option>
+                                    <option value="">Any Party</option>
                                     <option value="DEM">Florida Democratic Party</option>
                                     <option value="NPA">No Party Affiliation</option>
                                     <option value="REP">Republican Party of Florida</option>
@@ -404,7 +404,7 @@
                                     <option value="REF">Reform Party</option> 
                                 %end
                                 % if party == 'GRE':
-                                    <option value="">Any Pary</option>
+                                    <option value="">Any Party</option>
                                     <option value="DEM">Florida Democratic Party</option>
                                     <option value="NPA">No Party Affiliation</option>
                                     <option value="REP">Republican Party of Florida</option>
@@ -419,7 +419,7 @@
                                     <option value="REF">Reform Party</option> 
                                 %end
                                 % if party == 'IDP':
-                                    <option value="">Any Pary</option>
+                                    <option value="">Any Party</option>
                                     <option value="DEM">Florida Democratic Party</option>
                                     <option value="NPA">No Party Affiliation</option>
                                     <option value="REP">Republican Party of Florida</option>
@@ -434,7 +434,7 @@
                                     <option value="REF">Reform Party</option> 
                                 %end
                                 % if party == 'INT':
-                                    <option value="">Any Pary</option>
+                                    <option value="">Any Party</option>
                                     <option value="DEM">Florida Democratic Party</option>
                                     <option value="NPA">No Party Affiliation</option>
                                     <option value="REP">Republican Party of Florida</option>
@@ -449,7 +449,7 @@
                                     <option value="REF">Reform Party</option> 
                                 %end
                                 % if party == 'LPF':
-                                    <option value="">Any Pary</option>
+                                    <option value="">Any Party</option>
                                     <option value="DEM">Florida Democratic Party</option>
                                     <option value="NPA">No Party Affiliation</option>
                                     <option value="REP">Republican Party of Florida</option>
@@ -464,7 +464,7 @@
                                     <option value="REF">Reform Party</option> 
                                 %end
                                 % if party == 'PSL':
-                                    <option value="">Any Pary</option>
+                                    <option value="">Any Party</option>
                                     <option value="DEM">Florida Democratic Party</option>
                                     <option value="NPA">No Party Affiliation</option>
                                     <option value="REP">Republican Party of Florida</option>
@@ -479,7 +479,7 @@
                                     <option value="REF">Reform Party</option> 
                                 %end
                                 % if party == 'REF':
-                                    <option value="">Any Pary</option>
+                                    <option value="">Any Party</option>
                                     <option value="DEM">Florida Democratic Party</option>
                                     <option value="NPA">No Party Affiliation</option>
                                     <option value="REP">Republican Party of Florida</option>
@@ -495,7 +495,7 @@
                                 %end
                             %end
                             %if not defined('party'):
-                                <option value="" selected>Any Pary</option>
+                                <option value="" selected>Any Party</option>
                                 <option value="DEM">Florida Democratic Party</option>
                                 <option value="NPA">No Party Affiliation</option>
                                 <option value="REP">Republican Party of Florida</option>

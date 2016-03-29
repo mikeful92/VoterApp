@@ -1,6 +1,4 @@
-#
-
-from bottle import route, run, template, post, request, static_file, response
+from bottle import route, run, template, post, request, static_file, response, get, post, redirect
 import sqlite3, json, os, sys, re, time
 
 #Returns a connection to the sqlite DB
@@ -126,7 +124,7 @@ def queryGeneration(formData, baseQuery):
 
     #Perfect match search for County Code
     if countyCode != "":
-        if countyCode == "PAL":
+        if countyCode == "PAL" or countyCode == None:
             table = "PALMVOTERS"
         else:
             queryFields.append('CountyCode = "' + countyCode + '"')
@@ -291,15 +289,25 @@ def saveSearch(formData):
     phoneNumber = formData.get('phoneNumber')
     email = formData.get('email')
 
-    cursor.execute('INSERT INTO SEARCHES(SearchName, VoterID, LastName, Suffix, FirstName, AddressLine1, AddressLine2, City, CountyCode, ZipCode, Gender, Race, BirthMonth, BirthYear, RegMonth, RegYear, PartyAffiliation, PhoneNumber, Email)'+
-                    ' VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);', [searchName, voterID, lastName, middleName, firstName, address1, address2, city, countyCode, zipCode, gender, race, , birthMonth, birthYear, regMonth, regYear, party, phoneNumber, email])
+    print('Fields')
+    cursor.execute('INSERT INTO SEARCHES(SearchName, VoterID, LastName, FirstName, MiddleName, AddressLine1, AddressLine2, City, CountyCode, ZipCode, Gender, Race, BirthMonth, BirthYear, RegMonth, RegYear, PartyAffiliation, PhoneNumber, Email)'+
+                    ' VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);', [searchName, voterID, lastName, firstName, middleName, address1, address2, city, countyCode, zipCode, gender, race, birthMonth, birthYear, regMonth, regYear, party, phoneNumber, email])
     cursor.close()
+    connection.commit()
     connection.close()
+    print('Inserted')
+
+def selectSearches():
+    connection = setConnection('../Data/DB.sqlite')
+    cursor = connection.cursor()
+
+    searchQuery = "SELECT * FROM SEARCHES"
+    cursor.execute(searchQuery)
+    results = cursor.fetchall()
+
+    return results
 
 @route('/')
-@route('/voterapp')
-@route('/voterApp')
-@route('/VoterApp')
 def home():
     templateUsed = "index.tpl"
     return template(templateUsed)
@@ -308,6 +316,8 @@ def home():
 def listVoter():
     startTime = time.time()
     formData = request.forms
+    print(formData.get('MiddleName'))
+    print(formData.get('City'))
     print("Received request")
     if formData.get('type') == 'Export':
         results, count = sqlSearch(formData, True)
@@ -348,8 +358,8 @@ def listVoter():
 
     elif formData.get('type') == 'SaveSearch':
         saveSearch(formData)
-
-        output = template("searches.tpl")
+        results = selectSearches()
+        output = template("searches.tpl", searches=results)
 
     else:
         output = "Error"
@@ -424,13 +434,33 @@ def voterShow(voterID):
     else:
         return jsonResponse
 
-@route('/searches')
+@get('/searches')
 def listSearches():
-    
+    results = selectSearches()
+    output = template("searches.tpl", searches=results)
 
-    return template("searches.tpl", searches=results)
+    return output
+
+@get('/searches2')
+def listSearches2():
+    results = selectSearches()
+    output = template("searches2.tpl", searches=results)
+
+    return output
+
+@post('/searches2')
+def deleteSearch():
+    searchID = request.forms.get('SearchID')
+    connection = setConnection('../Data/DB.sqlite')
+    cursor = connection.cursor()
+
+    cursor.execute('DELETE FROM SEARCHES WHERE ID = ?', [searchID])
+    cursor.close()
+    connection.commit()
+    connection.close()
 
 
+    return redirect('/searches2')
 
 args = sys.argv
 if len(args) == 2:
