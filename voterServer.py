@@ -400,7 +400,7 @@ def listVoter(voterID):
     if len(results) == 0:
         output = template("index.tpl")
     else:
-        output = template("voter.tpl", **results)
+        output = template("voter.tpl", results)
     return output
 
 @route('/address/<address>')
@@ -414,18 +414,20 @@ def listAddress(address):
             "WHERE AddressLine1 = ?")
     countQuery = "SELECT COUNT(LastName) FROM VOTERS WHERE AddressLine1 = ?"
     cursor.execute(countQuery, [address])
-    count = cursor.fetchone()
+    countResults = cursor.fetchone()
     print(resultsQuery)
     cursor.execute(resultsQuery, [address])
     results = cursor.fetchmany(25)
     #TODO fix count results and over all results returned
     cursor.close()
     connection.close()
+
+    count = countResults['COUNT(LastName)']
     
     if len(results) == 0:
         output = template("index.tpl")
     else:
-        output = template("response.tpl", rows = results, count=count)
+        output = template("response.tpl", rows = results, count=count, residenceAddress1=address)
     return output
 
 
