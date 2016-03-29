@@ -358,8 +358,7 @@ def listVoter():
 
     elif formData.get('type') == 'SaveSearch':
         saveSearch(formData)
-        results = selectSearches()
-        output = template("searches.tpl", searches=results)
+        return redirect('/searches')
 
     else:
         output = "Error"

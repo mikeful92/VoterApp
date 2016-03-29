@@ -3,7 +3,10 @@
     <div class="well">
         <div class="row">
             <form class="form" action="/listVoter" METHOD="POST" enctype = "multipart/form-data" style="margin-bottom: 0;">
-                <div class="col-lg-2">                
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label for="SearchName"> {{ search['SearchName'] }} </label>
+                    </div>                
                     <div class="form-group">
                         <input type="text" class="form-control input" name="firstName" placeholder="First Name" value="{{ search['FirstName'] }}">
                     </div>
