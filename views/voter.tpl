@@ -23,7 +23,7 @@
             <li>Race: {{Race}}</li>
             <li>Birth Date: {{BirthDate}}</li>
             <li>Registration Date: {{RegistrationDate}}</li>
-            <li>Party Affiliation: {{PartyAffiliation}}</li>
+            <li>Party: {{Party}}</li>
             <li>Voter Status: {{VoterStatus}}</li>
             <li>Phone Area Code: {{PhoneAreaCode}}</li>
             <li>Phone Number: {{PhoneNumber}}</li>

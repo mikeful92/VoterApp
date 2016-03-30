@@ -329,7 +329,6 @@ def deleteSearch():
 args = sys.argv
 if len(args) == 2:
     port = int(os.path.join(args[1]))
-
 else:
     port = 8080
 
