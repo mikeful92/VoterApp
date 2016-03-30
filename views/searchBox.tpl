@@ -28,16 +28,16 @@
             <div class="row">
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <input type="text" class="form-control input" name="firstName" placeholder="First Name" value="{{ get('firstName','') }}">
+                        <input type="text" class="form-control input" name="FirstName" placeholder="First Name" value="{{ get('firstName','') }}">
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control input" name="lastName" placeholder="Last Name" value="{{ get('lastName','') }}">
+                        <input type="text" class="form-control input" name="LastName" placeholder="Last Name" value="{{ get('lastName','') }}">
                     </div>
                     <div class="form-group">
-                        <input type="text"  class="form-control input" name="middleName" placeholder="Middle Name" value="{{ get('middleName','') }}">
+                        <input type="text"  class="form-control input" name="MiddleName" placeholder="Middle Name" value="{{ get('middleName','') }}">
                     </div>
                     <div class="form-group">
-                        <select class="form-control input" name="countyCode" >
+                        <select class="form-control input" name="CountyCode" >
                             <option value='PAL' selected>Palm Beach</option>
                             <option value=''> Statewide </option>
                             <option value='BRO'>Broward</option>
@@ -116,35 +116,35 @@
                 <div class="col-lg-2">
                     <div class="form-group">
                         <input type="text"
-                        class="form-control input masterTooltip" name="residenceAddress1" placeholder="Residence Address" value="{{ get('residenceAddress','') }}">
+                        class="form-control input masterTooltip" name="AddressLine1" placeholder="Residence Address" value="{{ get('residenceAddress','') }}">
                     </div>
                     <div class="form-group">
-                        <input type="text"  class="form-control input" name="residenceAddress2" placeholder="Residence Address 2" value="{{ get('residenceAddress2','') }}" >
+                        <input type="text"  class="form-control input" name="AddressLine2" placeholder="Residence Address 2" value="{{ get('residenceAddress2','') }}" >
                     </div>
                     <div class="form-group">
-                        <input type="text"  class="form-control input" name="city" placeholder="City" value="{{ get('city','') }}">
+                        <input type="text"  class="form-control input" name="City" placeholder="City" value="{{ get('city','') }}">
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control input" name="zipCode" placeholder="ZipCode" value="{{ get('zipCode','') }}">
-                    </div>
-                </div>
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <input type="text" class="form-control input" name="birthMonth" placeholder="Birth Month" value="{{ get('birthMonth','') }}">
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control input" name="birthYear" placeholder="Birth Year" value="{{ get('birthYear','')}}">
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control input" name="regMonth" placeholder="Reg. Month" value="{{ get('regMonth','') }}">
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control input" name="regYear" placeholder="Reg. Year" value="{{ get('regYear','')}}">
+                        <input type="text" class="form-control input" name="ZipCode" placeholder="ZipCode" value="{{ get('zipCode','') }}">
                     </div>
                 </div>
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <select class="form-control input" name="gender">
+                        <input type="text" class="form-control input" name="BirthMonth" placeholder="Birth Month" value="{{ get('birthMonth','') }}">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control input" name="BirthYear" placeholder="Birth Year" value="{{ get('birthYear','')}}">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control input" name="RegMonth" placeholder="Reg. Month" value="{{ get('regMonth','') }}">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control input" name="RegYear" placeholder="Reg. Year" value="{{ get('regYear','')}}">
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <select class="form-control input" name="Gender">
                             %if defined('gender'):
                                 % if gender == "M":
                                     <option value="">Any Gender</option>
@@ -180,7 +180,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <select class="form-control input" name="race">
+                        <select class="form-control input" name="Race">
                             %if defined('race'):
                                 % if race == "":
                                     <option value="" selected>Any Race</option>
@@ -296,7 +296,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <select class="form-control input" name="party">
+                        <select class="form-control input" name="Party">
                             %if defined('party'):
                                 % if party == "":
                                     <option value="" selected>Any Party</option>
@@ -514,13 +514,13 @@
                 </div>
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <input type="text" class="form-control input" name="phoneNumber" placeholder = "Phone" value = "{{get ('phoneNumber','')}}">
+                        <input type="text" class="form-control input" name="PhoneNumber" placeholder = "Phone" value = "{{get ('phoneNumber','')}}">
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control input" name="email" placeholder = "E-mail" value = "{{get ('email','')}}">
+                        <input type="text" class="form-control input" name="Email" placeholder = "E-mail" value = "{{get ('email','')}}">
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control input" name="voterID" placeholder="Voter ID" value="{{ get('voterID','') }}">
+                        <input type="text" class="form-control input" name="VoterID" placeholder="Voter ID" value="{{ get('voterID','') }}">
                     </div>
                 </div>
                 <div class="col-lg-1">
@@ -531,7 +531,7 @@
                         <button class="btn btn-primary btn-block" type="submit" name="type" value="Export">Export</button>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control input" name="searchName" placeholder="Search Name">
+                        <input type="text" class="form-control input" name="SearchName" placeholder="Search Name">
                     </div>
                     <div class="form-group">
                         <button class="btn btn-primary btn-block" type="submit" name="type" value="SaveSearch">Save</button>

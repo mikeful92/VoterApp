@@ -47,7 +47,7 @@
                             <td>{{row['CountyCode']}}</td>
                             <td>{{row['Zipcode']}}</td>
                             <td>{{row['BirthDate']}}</td>
-                            <td>{{row['PartyAffiliation']}}</td>
+                            <td>{{row['Party']}}</td>
                             <td>{{row['RegistrationDate']}}</td>
                             <td>
                                 <form action="/voter/{{row['VoterID']}}" METHOD="GET"  style="margin-bottom: 0;">
