@@ -192,6 +192,7 @@ def home():
 
 @post('/listVoter')
 def listVoter():
+    print(dict(request.forms))
     startTime = time.time()
     formData = request.forms
     print("Received request")
