@@ -85,6 +85,7 @@
                             <input type="hidden" name="Party" value="{{ search['Party'] }}">
                             <input type="hidden" name="PhoneNumber" value="{{ search['PhoneNumber'] }}">
                             <input type="hidden" name="Email" value="{{ search['Email'] }}">
+                            <input type="hidden" name="VoterID" value="">
                             <button class="btn btn-primary btn-xs" type="submit" name="type" value="Lookup">Lookup</button>
                         </form>
 
