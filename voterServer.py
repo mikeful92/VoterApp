@@ -106,11 +106,13 @@ def queryGeneration(formData):
                         subconditions.append("{} = '{}'".format(key, field))
                 conditions.append('(' + ' OR '.join(subconditions) + ')')
 
-    if len(conditions) > 0:
-        whereCondition = ' AND '.join(conditions)
+    whereCondition = ''
 
-    resultsQuery = ' '.join([resultsBase, fromQuery, 'WHERE', whereCondition, ";"])
-    countQuery = ' '.join([countBase, fromQuery, 'WHERE', whereCondition, ";"])
+    if len(conditions) > 0:
+        whereCondition = 'WHERE ' + ' AND '.join(conditions)
+
+    resultsQuery = ' '.join([resultsBase, fromQuery, whereCondition, ";"])
+    countQuery = ' '.join([countBase, fromQuery, whereCondition, ";"])
 
     return resultsQuery, countQuery
 
