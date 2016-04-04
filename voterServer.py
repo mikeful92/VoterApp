@@ -91,7 +91,7 @@ def queryGeneration(formData):
         conditions.append('RegistrationDate LIKE "' + regMonth + '/_%_%/_%_%_%_%"')
 
 
-    if fieldDictionary.has_key("PhoneNumber"):
+    if fieldDictionary.has_key("PhoneNumber") and fieldDictionary['PhoneNumber'] != '':
         phoneNumber = fieldDictionary.pop("PhoneNumber")
         if phoneNumber == "*":
             conditions.append('PhoneNumber <> ""')
