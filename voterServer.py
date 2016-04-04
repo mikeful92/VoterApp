@@ -91,6 +91,20 @@ def queryGeneration(formData):
         conditions.append('RegistrationDate LIKE "' + regMonth + '/_%_%/_%_%_%_%"')
 
 
+    if fieldDictionary.has_key("PhoneNumber"):
+        phoneNumber = fieldDictionary.pop("PhoneNumber")
+        if phoneNumber == "*":
+            conditions.append('PhoneNumber <> ""')
+        else:
+            numeric = re.compile(r'[^\d*]+')
+            cleanNumber = numeric.sub('',phoneNumber)
+            print(cleanNumber)
+            if len(cleanNumber) <= 7:
+                conditions.append('PhoneNumber LIKE "' + cleanNumber.replace("*","%") + '"')
+            else:
+                conditions.append('PhoneAreaCode = "' + cleanNumber[:3] + '"')
+                conditions.append('PhoneNumber LIKE"' + cleanNumber[3:].replace("*","%") + '"')
+
 
     for key, value in fieldDictionary.items():
         if value:
