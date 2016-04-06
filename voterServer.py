@@ -91,19 +91,20 @@ def queryGeneration(formData):
         conditions.append('RegistrationDate LIKE "' + regMonth + '/_%_%/_%_%_%_%"')
 
 
-    if 'PhoneNumber' not in fieldDictionary and fieldDictionary['PhoneNumber'] != '':
-        phoneNumber = fieldDictionary.pop("PhoneNumber")
-        if phoneNumber == "*":
-            conditions.append('PhoneNumber <> ""')
-        else:
-            numeric = re.compile(r'[^\d*]+')
-            cleanNumber = numeric.sub('',phoneNumber)
-            print(cleanNumber)
-            if len(cleanNumber) <= 7:
-                conditions.append('PhoneNumber LIKE "' + cleanNumber.replace("*","%") + '"')
+    if 'PhoneNumber' in fieldDictionary:
+        if fieldDictionary['PhoneNumber'] != ''
+            phoneNumber = fieldDictionary.pop("PhoneNumber")
+            if phoneNumber == "*":
+                conditions.append('PhoneNumber <> ""')
             else:
-                conditions.append('PhoneAreaCode = "' + cleanNumber[:3] + '"')
-                conditions.append('PhoneNumber LIKE"' + cleanNumber[3:].replace("*","%") + '"')
+                numeric = re.compile(r'[^\d*]+')
+                cleanNumber = numeric.sub('',phoneNumber)
+                print(cleanNumber)
+                if len(cleanNumber) <= 7:
+                    conditions.append('PhoneNumber LIKE "' + cleanNumber.replace("*","%") + '"')
+                else:
+                    conditions.append('PhoneAreaCode = "' + cleanNumber[:3] + '"')
+                    conditions.append('PhoneNumber LIKE"' + cleanNumber[3:].replace("*","%") + '"')
 
 
     for key, value in fieldDictionary.items():
