@@ -92,7 +92,7 @@ def queryGeneration(formData):
 
 
     if 'PhoneNumber' in fieldDictionary:
-        if fieldDictionary['PhoneNumber'] != ''
+        if fieldDictionary['PhoneNumber'] != '':
             phoneNumber = fieldDictionary.pop("PhoneNumber")
             if phoneNumber == "*":
                 conditions.append('PhoneNumber <> ""')
