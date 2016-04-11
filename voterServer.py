@@ -215,16 +215,17 @@ def listVoter():
     if formData.get('type') == 'Export':
         results, count = sqlSearch(formData, True)
         data = []
-        headers = ['VoterID', 'LastName', 'Suffix', 'FirstName', 'MiddleName', 'AddressLine1', 'AddressLine2', 'City', 'CountyCode', 'State', 'ZipCode', 'MailingAddressLine1', 
+        headers = ['VoterID', 'LastName', 'Suffix', 'FirstName', 'MiddleName', 'AddressLine1', 'AddressLine2', 'City', 'CountyCode', 'ZipCode', 'MailingAddressLine1', 
                 'MailingAddressLine2', 'MailingAddressLine3', 'MailingCity', 'MailingState', 'MailingZipcode', 'MailingCountry', 'Gender', 'Race', 'BirthDate', 'RegistrationDate',
                 'Party', 'VoterStatus', 'PhoneAreaCode', 'PhoneNumber', 'PhoneExtension', 'Email']
         data.append('\t'.join(headers))
 
         if count > 0:
             for row in results:
+                print(row)
                 rowData = []
                 for col in headers:
-                    rowData.append(row[col])
+                    rowData.append(str(row[col]))
                 data.append('\t'.join(rowData))
         else:
             data.append("NO RESULTS FOUND")
