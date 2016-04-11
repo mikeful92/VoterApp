@@ -2,6 +2,7 @@
 <div class="container">
     <div class="well">
         <ul style="list-style-type:none">
+            <li><b>2016 Data</b></li>
             <li>Voter ID: {{VoterID}}</li>
             <li>Last Name: {{LastName}}</li>
             <li>Suffix: {{Suffix}}</li>
@@ -10,8 +11,7 @@
             <li>Residence Address: {{AddressLine1}} {{AddressLine2}}</li>
             <li>Residence City: {{City}}</li>
             <li>County Code: {{CountyCode}}</li>
-            <li>Residence State: {{State}}</li>
-            <li>Residence Zipcode: {{Zipcode}}</li>
+            <li>Residence Zipcode: {{ZipCode}}</li>
             <li>Mailing Address Line 1: {{MailingAddressLine1}}</li>
             <li>Mailing Address Line 2: {{MailingAddressLine2}}</li>
             <li>Mailing Address Line 3: {{MailingAddressLine3}}</li>
