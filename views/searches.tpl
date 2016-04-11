@@ -12,6 +12,7 @@
                 <th>Line 2</th>
                 <th>City</th>
                 <th>Cty.</th>
+                <th>Data Year</th>
                 <th>ZipCode</th>
                 <th>Birth Month</th>
                 <th>Birth Year</th>
@@ -43,6 +44,8 @@
                     <td>{{search['City']}}</td>
                    
                     <td>{{search['CountyCode']}}</td>
+
+                    <td>{{search['DataYear']}}</td>
                     
                     <td>{{search['Zipcode']}}</td>
                     
@@ -75,6 +78,7 @@
                             <input type="hidden" name="AddressLine2" value="{{search['AddressLine2']}}">
                             <input type="hidden" name="City" value="{{ search['City'] }}">
                             <input type="hidden" name="CountyCode" value="{{ search['CountyCode'] }}">
+                            <input type="hidden" name="DataYear" value="{{ search['DataYear'] }}">
                             <input type="hidden" name="ZipCode" value="{{ search['Zipcode'] }}">
                             <input type="hidden" name="BirthMonth" value="{{ search['BirthMonth'] }}">
                             <input type="hidden" name="BirthYear" value="{{ search['BirthYear'] }}">

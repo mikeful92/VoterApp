@@ -39,7 +39,7 @@
                     <div class="form-group">
                         <select class="form-control input" name="CountyCode" >
                             <option value='PAL' selected>Palm Beach</option>
-                            <option value=''> Statewide </option>
+                            <option value='STATE'> Statewide </option>
                             <option value='BRO'>Broward</option>
                             <option value='MRT'>Martin</option>
                             <option value='STL'>St. Lucie</option>
@@ -110,6 +110,12 @@
                             <option value='WAK'>Wakulla</option>
                             <option value='WAL'>Walton</option>
                             <option value='WAS'>Washington</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control input" name="DataYear" >
+                            <option value="2016">2016 Data</option>
+                            <option value="2014">2014 Data</option>
                         </select>
                     </div>
                 </div>

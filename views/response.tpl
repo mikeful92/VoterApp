@@ -45,7 +45,7 @@
                             <td>{{row['AddressLine2']}}</td>
                             <td>{{row['City']}}</td>
                             <td>{{row['CountyCode']}}</td>
-                            <td>{{row['Zipcode']}}</td>
+                            <td>{{row['ZipCode']}}</td>
                             <td>{{row['BirthDate']}}</td>
                             <td>{{row['Party']}}</td>
                             <td>{{row['RegistrationDate']}}</td>

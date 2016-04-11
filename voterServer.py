@@ -38,20 +38,19 @@ def queryGeneration(formData):
 
     if queryType == 'Lookup':
         resultsBase = ("SELECT FirstName, MiddleName, LastName, " +
-                        "AddressLine1, AddressLine2, City, CountyCode, Zipcode, "+
+                        "AddressLine1, AddressLine2, City, CountyCode, ZipCode, "+
                         "BirthDate, Party, RegistrationDate, VoterID")
     else:
         resultsBase = "SELECT *"
 
-    if fieldDictionary['CountyCode'] == 'PAL':
-        fromQuery = "FROM PALMVOTERS"
-    elif fieldDictionary['CountyCode'] == '':
-        fromQuery = "FROM VOTERS"
-    else:
-        fromQuery = "FROM VOTERS"
+    if fieldDictionary['CountyCode'] != 'PAL' and fieldDictionary['CountyCode'] != 'STATE':
+        fromQuery = "FROM STATE" + fieldDictionary['DataYear']
         conditions.append('CountyCode = "' + fieldDictionary['CountyCode'] + '"')
+    else:
+        fromQuery = "FROM " + fieldDictionary['CountyCode'] + fieldDictionary['DataYear']
 
     del fieldDictionary['CountyCode']
+    del fieldDictionary['DataYear']
 
     birthYear = fieldDictionary.pop('BirthYear')
     birthMonth = fieldDictionary.pop('BirthMonth')
@@ -164,9 +163,9 @@ def saveSearch(formData):
     count = countResults['COUNT(LastName)']
 
     fields = dict(formData)
-
-    cursor.execute('INSERT INTO SEARCHES(SearchName, Count, LastName, FirstName, MiddleName, AddressLine1, AddressLine2, City, CountyCode, ZipCode, Gender, Race, BirthMonth, BirthYear, RegMonth, RegYear, Party, PhoneNumber, Email)'+
-                    ' VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);', [fields['SearchName'], count, fields['LastName'], fields['FirstName'], fields['MiddleName'], fields['AddressLine1'], fields['AddressLine2'], fields['City'], fields['CountyCode'], fields['ZipCode'], fields['Gender'], fields['Race'], fields['BirthMonth'], fields['BirthYear'], fields['RegMonth'], fields['RegYear'], fields['Party'], fields['PhoneNumber'], fields['Email']])
+    print(fields['DataYear'])
+    cursor.execute('INSERT INTO SEARCHES(SearchName, Count, LastName, FirstName, MiddleName, AddressLine1, AddressLine2, City, CountyCode, DataYear, ZipCode, Gender, Race, BirthMonth, BirthYear, RegMonth, RegYear, Party, PhoneNumber, Email)'+
+                    ' VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);', [fields['SearchName'], count, fields['LastName'], fields['FirstName'], fields['MiddleName'], fields['AddressLine1'], fields['AddressLine2'], fields['City'], fields['CountyCode'], fields['DataYear'], fields['ZipCode'], fields['Gender'], fields['Race'], fields['BirthMonth'], fields['BirthYear'], fields['RegMonth'], fields['RegYear'], fields['Party'], fields['PhoneNumber'], fields['Email']])
     cursor.close()
     connection.commit()
     connection.close()
@@ -198,7 +197,7 @@ def listVoter():
     if formData.get('type') == 'Export':
         results, count = sqlSearch(formData, True)
         data = []
-        headers = ['VoterID', 'LastName', 'Suffix', 'FirstName', 'MiddleName', 'AddressLine1', 'AddressLine2', 'City', 'CountyCode', 'State', 'Zipcode', 'MailingAddressLine1', 
+        headers = ['VoterID', 'LastName', 'Suffix', 'FirstName', 'MiddleName', 'AddressLine1', 'AddressLine2', 'City', 'CountyCode', 'State', 'ZipCode', 'MailingAddressLine1', 
                 'MailingAddressLine2', 'MailingAddressLine3', 'MailingCity', 'MailingState', 'MailingZipcode', 'MailingCountry', 'Gender', 'Race', 'BirthDate', 'RegistrationDate',
                 'Party', 'VoterStatus', 'PhoneAreaCode', 'PhoneNumber', 'PhoneExtension', 'Email']
         data.append('\t'.join(headers))
@@ -244,7 +243,7 @@ def listVoter(voterID):
     connection = setConnection('../Data/DB.sqlite')
     cursor = connection.cursor()
 
-    query = """SELECT * FROM VOTERS WHERE VoterID = ?"""
+    query = """SELECT * FROM STATE2016 WHERE VoterID = ?"""
     cursor.execute(query, [str(voterID)])
     results = cursor.fetchone()
     cursor.close()
@@ -261,11 +260,11 @@ def listAddress(address):
     connection = setConnection('../Data/DB.sqlite')
     cursor = connection.cursor()
     resultsQuery = ("SELECT FirstName, MiddleName, LastName, Suffix, " +
-            "AddressLine1, AddressLine2, City, CountyCode, Zipcode, "+
+            "AddressLine1, AddressLine2, City, CountyCode, ZipCode, "+
             "VoterID, BirthDate, Party, RegistrationDate " + 
-            "FROM VOTERS " +
+            "FROM STATE2016 " +
             "WHERE AddressLine1 = ?")
-    countQuery = "SELECT COUNT(LastName) FROM VOTERS WHERE AddressLine1 = ?"
+    countQuery = "SELECT COUNT(LastName) FROM STATE2016 WHERE AddressLine1 = ?"
     cursor.execute(countQuery, [address])
     countResults = cursor.fetchone()
     print(resultsQuery)
@@ -292,7 +291,7 @@ def send_static(directory, filename):
 def voterShow(voterID):
     connection = setConnection('../Data/DB.sqlite')
     cursor = connection.cursor()
-    query = "SELECT * FROM VOTERS WHERE VoterID = ?;"
+    query = "SELECT * FROM STATE2016 WHERE VoterID = ?;"
 
     cursor.execute(query, [voterID])
 
