@@ -90,6 +90,21 @@ def queryGeneration(formData):
         conditions.append('RegistrationDate LIKE "' + regMonth + '/_%_%/_%_%_%_%"')
 
 
+    if 'PhoneNumber' in fieldDictionary:
+        if fieldDictionary['PhoneNumber'] != '':
+            phoneNumber = fieldDictionary.pop("PhoneNumber")
+            if phoneNumber == "*":
+                conditions.append('PhoneNumber <> ""')
+            else:
+                numeric = re.compile(r'[^\d*]+')
+                cleanNumber = numeric.sub('',phoneNumber)
+                print(cleanNumber)
+                if len(cleanNumber) <= 7:
+                    conditions.append('PhoneNumber LIKE "' + cleanNumber.replace("*","%") + '"')
+                else:
+                    conditions.append('PhoneAreaCode = "' + cleanNumber[:3] + '"')
+                    conditions.append('PhoneNumber LIKE"' + cleanNumber[3:].replace("*","%") + '"')
+
 
     for key, value in fieldDictionary.items():
         if value:
@@ -105,11 +120,13 @@ def queryGeneration(formData):
                         subconditions.append("{} = '{}'".format(key, field))
                 conditions.append('(' + ' OR '.join(subconditions) + ')')
 
-    if len(conditions) > 0:
-        whereCondition = ' AND '.join(conditions)
+    whereCondition = ''
 
-    resultsQuery = ' '.join([resultsBase, fromQuery, 'WHERE', whereCondition, ";"])
-    countQuery = ' '.join([countBase, fromQuery, 'WHERE', whereCondition, ";"])
+    if len(conditions) > 0:
+        whereCondition = 'WHERE ' + ' AND '.join(conditions)
+
+    resultsQuery = ' '.join([resultsBase, fromQuery, whereCondition, ";"])
+    countQuery = ' '.join([countBase, fromQuery, whereCondition, ";"])
 
     return resultsQuery, countQuery
 
@@ -191,6 +208,7 @@ def home():
 
 @post('/listVoter')
 def listVoter():
+    print(dict(request.forms))
     startTime = time.time()
     formData = request.forms
     print("Received request")
@@ -328,7 +346,6 @@ def deleteSearch():
 args = sys.argv
 if len(args) == 2:
     port = int(os.path.join(args[1]))
-
 else:
     port = 8080
 
