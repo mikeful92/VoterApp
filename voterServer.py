@@ -306,7 +306,7 @@ def listAddress(address):
 def send_static(directory, filename):
     return static_file(os.path.join(directory, filename), root='./static/')
 
-@route('/api/v1/voter/<voterID>')
+@route('/api/v1/voter/id/<voterID>')
 def voterShow(voterID):
     connection = setConnection('../Data/DB.sqlite')
     cursor = connection.cursor()
@@ -324,6 +324,32 @@ def voterShow(voterID):
         return { "success" : False, "error" : "None or more than one voter returned" }
     else:
         return jsonResponse
+
+@route('/api/v1/voter/name/<name>')
+def voterShow(name):
+    name = name.split("&")
+    if len(name) != 2:
+        lastName = name[0].upper()
+    else:
+        firstName = name[0].upper()
+        lastName = name[1].upper()
+
+    connection = setConnection('../Data/DB.sqlite')
+    cursor = connection.cursor()
+    query = "SELECT * FROM STATE2016 WHERE LastName = ? AND FirstName = ?;"
+    cursor.execute(query, [lastName, firstName])
+
+    data = cursor.fetchone()
+    print(query)
+    cursor.close()
+    connection.close()
+
+    jsonResponse = json.dumps(data)
+
+    if data:
+        return jsonResponse
+    else:
+        return { "success" : False, "error" : "None or more than one voter returned" }
 
 @get('/searches')
 def listSearches():
