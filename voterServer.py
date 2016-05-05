@@ -336,7 +336,7 @@ def voterShow(name):
 
     connection = setConnection('../Data/DB.sqlite')
     cursor = connection.cursor()
-    query = "SELECT * FROM STATE2016 WHERE LastName = ? AND FirstName = ?;"
+    query = "SELECT FirstName, LastName, AddressLine1, City, ZipCode, VoterID, Party, Email, BirthDate FROM STATE2016 WHERE LastName = ? AND FirstName = ?;"
     cursor.execute(query, [lastName, firstName])
 
     data = cursor.fetchone()
