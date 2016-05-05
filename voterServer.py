@@ -344,7 +344,7 @@ def voterShow(name):
     cursor.close()
     connection.close()
 
-    jsonResponse = json.dumps(data)
+    jsonResponse = json.dumps({"Voters":data})
 
     if data:
         return jsonResponse
